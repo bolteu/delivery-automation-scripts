@@ -25,7 +25,7 @@ class AdminPanel:
     self.driver = driver
 
   def login(self, username, password):
-    self.driver.get(base_admin_panel_url + "/login?referrer=%2F&stage=credentials")
+    self.driver.get(base_admin_panel_url + "/login?stage=credentials")
     self.driver.implicitly_wait(10)
     self.driver.find_element_by_name("username").send_keys(username)
     self.driver.find_element_by_name("password").send_keys(password)
