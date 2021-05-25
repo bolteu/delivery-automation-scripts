@@ -12,7 +12,7 @@ import re
 df = pd.read_csv(database)
 driver = webdriver.Chrome(chromedriver)
 columns = list(df)
-
+#test_commit
 admin_panel = AdminPanel(driver=driver)
 
 # ​ Admin-panel login
