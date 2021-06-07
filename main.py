@@ -40,7 +40,7 @@ for index, row in df.iterrows():
         url = driver.current_url
         pattern = 'edit/(\d+)'
         id = re.search(pattern, url)[1]
-        partner_url = base_admin_panel_url + "/delivery/delivery/partners/" + str(id) + "/couriers/create"
+        partner_url = base_admin_panel_url + "/delivery-courier/partners/" + str(id) + "/couriers/create"
         driver.get(partner_url)
 
         # driver.find_element_by_link_text("Create").click()
