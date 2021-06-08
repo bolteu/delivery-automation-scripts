@@ -50,7 +50,7 @@ class AdminPanel:
         for option in self.driver.find_elements_by_css_selector('.MuiListItem-root'):
           if option.text.strip() in select_values:
             option.click()
-        self.driver.execute_script("document.querySelector('[role=\"presentation\"] [aria-hidden=true]').click()")
+        self.driver.execute_script("document.querySelector('[role=\"presentation\"] [aria-hidden=true]') && document.querySelector('[role=\"presentation\"] [aria-hidden=true]').click()")
 
       elif el_type == 'autocomplete':
         el.send_keys(str(field_value))
