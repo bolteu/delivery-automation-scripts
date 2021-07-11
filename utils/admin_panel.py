@@ -1,7 +1,10 @@
+import re
+
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 import math
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
 
 from settings.config import base_admin_panel_url, old_base_admin_panel_url
 
@@ -23,6 +26,25 @@ def get_element_type(el):
 class AdminPanel:
   def __init__(self, driver):
     self.driver = driver
+
+  def collect_page_errors(self):
+    return self.driver.execute_script("""
+      let errors = [...document.querySelectorAll('.Mui-error.MuiFormHelperText-contained')];
+      
+      let getErrorText = (el) => {
+        try {
+          return `${el.previousSibling.querySelector('[name]').getAttribute('name')}: ${el.innerHTML.trim()}`;
+        } catch (e) {
+          return el.innerHTML.trim();
+        }
+      }
+      return errors.map(getErrorText).filter(Boolean)
+    """)
+
+  def wait_for_url_change(self, url_mask, timeout = 5):
+    wait = WebDriverWait(self.driver, timeout)
+    wait.until(lambda driver: bool(re.search(url_mask, driver.current_url)))
+
 
   def login(self, username, password):
     self.driver.get(base_admin_panel_url + "/login?stage=credentials")
