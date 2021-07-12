@@ -22,8 +22,10 @@ admin_panel.login(username=username, password=password)
 
 couriers_not_registered = []
 script_step = ''
+extra_step_info = []
 
 for index, row in df.iterrows():
+    extra_step_info = []
     print("{index} / {total_lines} - {phone_number}".format(index=index+1, total_lines=total_lines, phone_number=get_cell_value(row, "partner_phone")), end="")
     try:
         script_step = 'create partner profile'
@@ -43,6 +45,7 @@ for index, row in df.iterrows():
         admin_panel.wait_for_url_change('partners/edit/\d+')
 
         url = driver.current_url
+        extra_step_info.append('Partner profile: ' + url)
         pattern = 'edit/(\d+)'
         id = re.search(pattern, url)[1]
         script_step = 'create courier profile'
@@ -64,7 +67,8 @@ for index, row in df.iterrows():
         print(" [OK]")
     except:
         print(" [FAILED]")
-        couriers_not_registered.append((get_cell_value(row, "partner_phone"), admin_panel.collect_page_errors() or [script_step + " error"]))
+        details = admin_panel.collect_page_errors() or (extra_step_info + [script_step + " error"])
+        couriers_not_registered.append((get_cell_value(row, "partner_phone"), details))
 
 driver.close()
 
