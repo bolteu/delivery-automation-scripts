@@ -1,4 +1,5 @@
 import re
+from time import sleep
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
@@ -68,11 +69,14 @@ class AdminPanel:
       el_type = get_element_type(el)
       if el_type == 'multiselect':
         el.find_element_by_xpath("..").click()
+        sleep(1)
         select_values = str(field_value).split(',')
         for option in self.driver.find_elements_by_css_selector('.MuiListItem-root'):
           if option.text.strip() in select_values:
             option.click()
+            sleep(2)
         self.driver.execute_script("document.querySelector('[role=\"presentation\"] [aria-hidden=true]') && document.querySelector('[role=\"presentation\"] [aria-hidden=true]').click()")
+        sleep(2)
 
       elif el_type == 'autocomplete':
         el.send_keys(str(field_value))
