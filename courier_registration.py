@@ -11,7 +11,9 @@ import re
 
 df = pd.read_csv(database)
 driver = webdriver.Chrome(chromedriver)
+driver.maximize_window()
 columns = list(df)
+total_lines = len(list(df.iterrows()))
 
 admin_panel = AdminPanel(driver=driver)
 
@@ -19,14 +21,17 @@ admin_panel = AdminPanel(driver=driver)
 admin_panel.login(username=username, password=password)
 
 couriers_not_registered = []
+script_step = ''
+extra_step_info = []
 
 for index, row in df.iterrows():
+    extra_step_info = []
+    print("{index} / {total_lines} - {phone_number}".format(index=index+1, total_lines=total_lines, phone_number=get_cell_value(row, "partner_phone")), end="")
     try:
+        script_step = 'create partner profile'
         driver.implicitly_wait(3)
         # partner profile:
-        driver.execute_script("window.open('" + base_admin_panel_url + "/fleet-root/partners/new')")
-        driver.switch_to.window(driver.window_handles[index + 1])
-        url = driver.current_url
+        driver.get(base_admin_panel_url + "/fleet-root/partners/new")
         # create partner profile:
         for column in columns:
             if "partner" in column:
@@ -37,9 +42,13 @@ for index, row in df.iterrows():
         sleep(1)
         driver.implicitly_wait(10)
 
+        admin_panel.wait_for_url_change('partners/edit/\d+')
+
         url = driver.current_url
+        extra_step_info.append('Partner profile: ' + url)
         pattern = 'edit/(\d+)'
         id = re.search(pattern, url)[1]
+        script_step = 'create courier profile'
         partner_url = base_admin_panel_url + "/delivery-courier/partners/" + str(id) + "/couriers/create"
         driver.get(partner_url)
 
@@ -53,11 +62,21 @@ for index, row in df.iterrows():
                 field_name = column.replace("courier_","")
                 admin_panel.set_form_value(field_name, get_cell_value(row, column))
         driver.find_element_by_xpath("//span[contains(text(),'Save')]").click()
+
+        admin_panel.wait_for_url_change('couriers/\d+\?tab=COURIER')
+        print(" [OK]")
     except:
-        couriers_not_registered.append(get_cell_value(row, "partner_phone"))
+        print(" [FAILED]")
+        details = admin_panel.collect_page_errors() or (extra_step_info + [script_step + " error"])
+        couriers_not_registered.append((get_cell_value(row, "partner_phone"), details))
+
+driver.close()
 
 if not couriers_not_registered:
     print("All couriers registered correctly.")
 else:
     print("Phone numbers of not registered couriers:")
-    print(couriers_not_registered)
+    for failed_item in couriers_not_registered:
+        print(failed_item[0])
+        print("\n".join(failed_item[1]))
+        print()
