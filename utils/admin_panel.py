@@ -68,15 +68,46 @@ class AdminPanel:
       el = self.driver.find_element_by_name(field_name)
       el_type = get_element_type(el)
       if el_type == 'multiselect':
+        # open list
         el.find_element_by_xpath("..").click()
-        sleep(1)
-        select_values = str(field_value).split(',')
-        for option in self.driver.find_elements_by_css_selector('.MuiListItem-root'):
-          if option.text.strip() in select_values:
-            option.click()
-            sleep(2)
+
+        # js hack to select proper elements
+        driver.execute_script("""
+            function getReactElPropertyName(fieldName) {
+              let el = document.querySelector(`#mui-component-select-${fieldName}`).parentElement;
+              for (let name of Object.keys(el)) {
+                console.log(name, el[name], el);
+                if(el[name].className){
+                  return name;
+                }
+              }
+            }
+
+            function setMultiselectValue(paramName, values) {
+              let reactProp = getReactElPropertyName(paramName);
+
+              const selectProps = document.querySelector(`#mui-component-select-${paramName}`)
+                .parentElement[reactProp].children[1].props.children.props.children
+                .map(el => ({title: el.props.children, value: String(el.props.value)}))
+                .reduce((acc, el) => {
+                  acc[el.title]= el.value;
+                  return acc;
+                }, {});
+              
+              values.split(',')
+                .map(el => el.trim())
+                .forEach(valueTitle => {
+                  document.querySelector(`#mui-component-select-${paramName}`)
+                    .parentElement[reactProp].children[1].props.children.props.value.push(selectProps[valueTitle]);
+                });
+            }
+
+            setMultiselectValue(arguments[0], arguments[1]);
+        """, field_name, select_values)
+
+        sleep(1);
+        # close list
         self.driver.execute_script("document.querySelector('[role=\"presentation\"] [aria-hidden=true]') && document.querySelector('[role=\"presentation\"] [aria-hidden=true]').click()")
-        sleep(2)
 
       elif el_type == 'autocomplete':
         el.send_keys(str(field_value))
