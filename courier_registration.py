@@ -70,6 +70,10 @@ for index, row in df.iterrows():
         details = admin_panel.collect_page_errors() or (extra_step_info + [script_step + " error"])
         couriers_not_registered.append((get_cell_value(row, "partner_phone"), details))
 
+        # Open a new to keep error in the old one
+        driver.execute_script("window.open('');")
+        driver.switch_to.window(len(driver.window_handles)-1)
+
 driver.close()
 
 if not couriers_not_registered:
