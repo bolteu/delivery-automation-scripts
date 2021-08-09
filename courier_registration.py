@@ -52,7 +52,6 @@ for index, row in df.iterrows():
         partner_url = base_admin_panel_url + "/delivery-courier/partners/" + str(id) + "/couriers/create"
         driver.get(partner_url)
 
-        # driver.find_element_by_link_text("Create").click()
         driver.implicitly_wait(10)
 
         # create courier profile:

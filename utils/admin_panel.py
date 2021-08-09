@@ -6,6 +6,8 @@ from selenium.webdriver.support.select import Select
 import math
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.common.by import By
 
 from settings.config import base_admin_panel_url, old_base_admin_panel_url
 
@@ -68,47 +70,51 @@ class AdminPanel:
       el = self.driver.find_element_by_name(field_name)
       el_type = get_element_type(el)
       if el_type == 'multiselect':
-        # open list
+        # open select menu
         el.find_element_by_xpath("..").click()
         select_values = str(field_value).split(',')
-
 
         # js hack to select proper elements
         self.driver.execute_script("""
             function getReactElPropertyName(fieldName) {
-              let el = document.querySelector(`#mui-component-select-${fieldName}`).parentElement;
+              let el = document.querySelector(
+                `#mui-component-select-${fieldName}`
+              ).parentElement;
               for (let name of Object.keys(el)) {
                 console.log(name, el[name], el);
-                if(el[name].className){
+                if (el[name].className) {
                   return name;
                 }
               }
             }
-
+            
             function setMultiselectValue(paramName, values) {
               let reactProp = getReactElPropertyName(paramName);
-
-              const selectProps = document.querySelector(`#mui-component-select-${paramName}`)
-                .parentElement[reactProp].children[1].props.children.props.children
-                .map(el => ({title: el.props.children, value: String(el.props.value)}))
+            
+              const selectProps = document
+                .querySelector(`#mui-component-select-${paramName}`)
+                .parentElement[reactProp].children[1].props.children.props.children.map(
+                  (el) => ({ title: el.props.children, value: String(el.props.value) })
+                )
                 .reduce((acc, el) => {
-                  acc[el.title]= el.value;
+                  acc[el.title] = el.value;
                   return acc;
                 }, {});
-              
-              values.split(',')
-                .map(el => el.trim())
-                .forEach(valueTitle => {
-                  document.querySelector(`#mui-component-select-${paramName}`)
-                    .parentElement[reactProp].children[1].props.children.props.value.push(selectProps[valueTitle]);
+            
+              const valuesIds = values
+                .map((el) => el.trim())
+                .map((valueTitle) => selectProps[valueTitle]);
+            
+              document
+                .querySelector(`#mui-component-select-${paramName}`)
+                .parentElement.parentElement[reactProp].children[1].props.onChange({
+                  target: { value: valuesIds },
                 });
             }
 
             setMultiselectValue(arguments[0], arguments[1]);
         """, field_name, select_values)
-
-        sleep(1);
-        # close list
+        #  close select menu
         self.driver.execute_script("document.querySelector('[role=\"presentation\"] [aria-hidden=true]') && document.querySelector('[role=\"presentation\"] [aria-hidden=true]').click()")
 
       elif el_type == 'autocomplete':
@@ -119,6 +125,9 @@ class AdminPanel:
             break
 
       elif el_type == 'text':
+        # wait = WebDriverWait(self.driver, 10)
+        # wait.until(ec.element_to_be_clickable((By.NAME, field_name)))
+
         el.clear()
         el.send_keys(str(field_value))
 
