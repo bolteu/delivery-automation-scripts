@@ -70,9 +70,11 @@ class AdminPanel:
       if el_type == 'multiselect':
         # open list
         el.find_element_by_xpath("..").click()
+                select_values = str(field_value).split(',')
+
 
         # js hack to select proper elements
-        driver.execute_script("""
+        self.driver.execute_script("""
             function getReactElPropertyName(fieldName) {
               let el = document.querySelector(`#mui-component-select-${fieldName}`).parentElement;
               for (let name of Object.keys(el)) {
