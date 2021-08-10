@@ -71,7 +71,7 @@ for index, row in df.iterrows():
 
         # Open a new to keep error in the old one
         driver.execute_script("window.open('');")
-        driver.switch_to.window(len(driver.window_handles)-1)
+        driver.switch_to.window(driver.window_handles[len(driver.window_handles)-1])
 
 driver.close()
 
