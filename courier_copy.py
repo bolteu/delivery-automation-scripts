@@ -26,8 +26,8 @@ extra_step_info = []
 
 for index, row in df.iterrows():
     extra_step_info = []
-    print("{index} / {total_lines} - {phone_number}".format(index=index+1, total_lines=total_lines, phone_number=get_cell_value(row, "partner_phone")), end="")
     courier_id = row.courier_id
+    print("{index} / {total_lines} - {courier_id}".format(index=index+1, total_lines=total_lines, courier_id=courier_id, end=""))
 
     try:
         script_step = 'copy courier'
