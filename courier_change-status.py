@@ -20,7 +20,7 @@ admin_panel = AdminPanel(driver=driver)
 # ​ Admin-panel login
 admin_panel.login(username=username, password=password)
 
-couriers_not_copied = []
+couriers_not_updated = []
 script_step = ''
 extra_step_info = []
 
@@ -48,15 +48,15 @@ for index, row in df.iterrows():
     except:
         print(" [FAILED]")
         details = admin_panel.collect_page_errors() or (extra_step_info + [script_step + " error"])
-        couriers_not_copied.append((courier_id, details))
+        couriers_not_updated.append((courier_id, details))
 
 driver.close()
 
-if not couriers_not_copied:
+if not couriers_not_updated:
     print("All couriers updated correctly.")
 else:
     print("Ids of not updated couriers:")
-    for failed_item in couriers_not_copied:
+    for failed_item in couriers_not_updated:
         print(failed_item[0])
         print("\n".join(failed_item[1]))
         print()
