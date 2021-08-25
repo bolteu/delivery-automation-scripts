@@ -34,7 +34,7 @@ for index, row in df.iterrows():
     try:
         script_step = 'change status'
         driver.implicitly_wait(3)
-        driver.get(base_admin_panel_url + "/delivery-courier/couriers/" + courier_id)
+        driver.get(base_admin_panel_url + "/delivery-courier/couriers/" + str(courier_id))
 
         admin_panel.set_form_value('status', new_courier_status)
 
