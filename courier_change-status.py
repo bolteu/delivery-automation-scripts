@@ -42,7 +42,8 @@ for index, row in df.iterrows():
         sleep(1)
 
         if admin_panel.collect_page_errors():
-            raise
+            raise Exception("Something went wrong")
+
 
         print(" [OK]Courier " + courier_id + " status is updated to " + new_courier_status)
     except:
