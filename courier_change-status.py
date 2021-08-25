@@ -36,7 +36,7 @@ for index, row in df.iterrows():
         driver.implicitly_wait(3)
         driver.get(base_admin_panel_url + "/delivery-courier/couriers/" + courier_id)
 
-        admin_panel.set_form_value(column, new_courier_status)
+        admin_panel.set_form_value('status', new_courier_status)
 
         driver.find_element_by_xpath("//span[contains(text(),'Save')]").click()
         sleep(1)
