@@ -79,7 +79,11 @@ class AdminPanel:
         sleep(2)
 
       elif el_type == 'autocomplete':
-        el.clear()
+        el.click()
+        while not el.get_attribute("value") == "":
+          el.send_keys(Keys.BACK_SPACE)
+          sleep(0.2)
+
         el.send_keys(str(field_value))
         for option in self.driver.find_elements_by_css_selector('.MuiAutocomplete-option'):
           if option.text == str(field_value):

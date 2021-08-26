@@ -1,6 +1,7 @@
 # This Python file uses the following encoding: utf-8
 
 # In case of any questions contact: krzysztof.witkowski@bolt.eu
+import sys
 from time import sleep
 from selenium import webdriver
 import pandas as pd
@@ -47,7 +48,7 @@ for index, row in df.iterrows():
 
         print(" [OK]Courier " + courier_id + " status is updated to " + new_courier_status)
     except:
-        print(" [FAILED]")
+        print(" [FAILED]", sys.exc_info()[0])
         details = admin_panel.collect_page_errors() or (extra_step_info + [script_step + " error"])
         couriers_not_updated.append((courier_id, details))
 
