@@ -34,7 +34,6 @@ for index, row in df.iterrows():
 
     try:
         script_step = 'change status'
-        driver.implicitly_wait(3)
         driver.get(base_admin_panel_url + "/delivery-courier/couriers/" + str(courier_id))
 
         admin_panel.set_form_value('status', new_courier_status)
@@ -42,11 +41,13 @@ for index, row in df.iterrows():
         driver.find_element_by_xpath("//span[contains(text(),'Save')]").click()
         sleep(1)
 
+        if not admin_panel.get_form_value('status') == new_courier_status:
+            raise Exception("Status was not changed properly")
+
         if admin_panel.collect_page_errors():
-            raise Exception("Something went wrong")
+            raise Exception("Something went wrong: " + ','.join(admin_panel.collect_page_errors()))
 
-
-        print(" [OK]Courier " + courier_id + " status is updated to " + new_courier_status)
+        print(" [OK]Courier " + str(courier_id) + " status is updated to " + new_courier_status)
     except:
         print(" [FAILED]", sys.exc_info()[0])
         details = admin_panel.collect_page_errors() or (extra_step_info + [script_step + " error"])
