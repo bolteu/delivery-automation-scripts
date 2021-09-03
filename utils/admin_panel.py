@@ -10,6 +10,9 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from settings.config import base_admin_panel_url, old_base_admin_panel_url
 
+def log(message):
+    if False:
+        print('@@ ' + message)
 
 def get_element_type(el):
     if el.get_attribute('class') == 'MuiSelect-nativeInput' and el.get_attribute('aria-hidden') == 'true':
@@ -31,6 +34,7 @@ class AdminPanel:
         self.driver = driver
 
     def collect_page_errors(self):
+        log('collect errors')
         return self.driver.execute_script("""
       let errors = [...document.querySelectorAll('.Mui-error.MuiFormHelperText-contained')];
       
@@ -45,6 +49,7 @@ class AdminPanel:
     """)
 
     def wait_for_url_change(self, url_mask, timeout=5):
+        log('wait for url change')
         wait = WebDriverWait(self.driver, timeout)
         wait.until(lambda driver: bool(re.search(url_mask, driver.current_url)))
 
@@ -63,6 +68,7 @@ class AdminPanel:
         self.driver.find_element_by_xpath("//div[contains(text(),'Login')]").click()
 
     def get_form_value(self, field_name):
+        log('get form value (' + field_name + ')')
         el = WebDriverWait(self.driver, 20).until(
             EC.element_to_be_clickable((By.NAME, field_name))
         )
@@ -73,14 +79,21 @@ class AdminPanel:
         else:
             raise Exception("Get form value is not implemented for " + el_type + " field type")
 
+    def wait_to_be_clickable(self, field_name):
+        el = WebDriverWait(self.driver, 20).until(
+            EC.element_to_be_clickable((By.NAME, field_name))
+        )
+
     def set_form_value(self, field_name, field_value):
+        log('set form value (' + field_name + ', ' + str(field_value) + ')')
+
         if isinstance(field_value, float) and math.isnan(field_value):
             return
         try:
-            el = WebDriverWait(self.driver, 20).until(
-                EC.element_to_be_clickable((By.NAME, field_name))
-            )
+            el = self.driver.find_element_by_name(field_name)
             el_type = get_element_type(el)
+            log('set form value with type (' + field_name + ', ' + str(field_value) + ',' + el_type + ')')
+
             if el_type == 'multiselect':
                 el.find_element_by_xpath("..").click()
                 sleep(1)
@@ -94,7 +107,7 @@ class AdminPanel:
                 sleep(2)
 
             elif el_type == 'autocomplete':
-
+                self.wait_to_be_clickable(field_name)
                 while not el.get_attribute("value") == "":
                   el.send_keys(Keys.BACK_SPACE)
 
