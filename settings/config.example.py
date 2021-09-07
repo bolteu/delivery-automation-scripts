@@ -8,3 +8,12 @@ password = "123412341234"
 
 base_admin_panel_url = ''
 old_base_admin_panel_url = ''
+
+# <editor-fold desc="Gsheet API prerequisites">
+json_credentials = 'auth.json'
+scope = ['https://www.googleapis.com/auth/spreadsheets','https://www.googleapis.com/auth/drive']
+doc_url = '' #PASTE GSHEET URL HERE
+js_dump = {
+ #Paste JSON DATA HERE
+}
+# </editor-fold>
