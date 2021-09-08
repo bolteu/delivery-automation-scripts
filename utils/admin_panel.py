@@ -139,10 +139,10 @@ class AdminPanel:
         except NoSuchElementException:
             print('No element with name ', field_name, ' found')
 
-    def save_provider(self, driver):
-        driver.implicitly_wait(5)
-        save_el = driver.find_element_by_xpath("// span[contains(text(), 'Save')]")
-        driver.execute_script("arguments[0].scrollIntoView();", save_el)
+    def save_provider(self):
+        self.driver.implicitly_wait(5)
+        save_el = self.driver.find_element_by_xpath("// span[contains(text(), 'Save')]")
+        self.driver.execute_script("arguments[0].scrollIntoView();", save_el)
         sleep(0.5)
-        driver.execute_script("arguments[0].click();", save_el)
+        self.driver.execute_script("arguments[0].click();", save_el)
         sleep(3)
