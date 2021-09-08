@@ -17,7 +17,7 @@ with open(json_credentials, 'w') as fp: json.dump(js_dump, fp, indent = 2) #crea
 mode = input('Type in enable or disable: ') #Define if you want to add or remove
 
 creds = ServiceAccountCredentials.from_json_keyfile_name(json_credentials, scope) #initialise credentials for GSheet API
-sheetname = 'Trait' #name of the list with data for script
+sheetname = os.path.basename(__file__) #get name of the current script and use it to find a list with same name in Gsheet file
 client = gspread.authorize(creds) #Connect to API
 spreadsheet = client.open_by_url(doc_url) #Open spreadsheet
 database = spreadsheet.worksheet(sheetname) #Open the needed list
