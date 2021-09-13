@@ -56,12 +56,12 @@ for i in range(len(df)):
         # Tickbox
         bl_tick = driver.find_element_by_name('is_blanket_menu_discount_enabled')
         bl_tick_p = bl_tick.find_element_by_xpath('..').find_element_by_xpath('..').get_attribute('class')
-        if type == 'enable':
+        if mode == 'enable':
                 if re.search('checked', bl_tick_p):
                         pass
                 else:
                         bl_tick.click()
-        if type == 'disable':
+        if mode == 'disable':
                 if re.search('checked', bl_tick_p):
                         bl_tick.click()
                 else:
