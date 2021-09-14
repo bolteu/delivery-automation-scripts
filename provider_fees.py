@@ -58,7 +58,7 @@ for i in range(len(df)):
         ff_val = ff_input.get_attribute('value') #get current value of the form (usually it is a dummy value)
         [ff_input.send_keys(Keys.BACKSPACE) for fff in range(len(ff_val))] # delete dummy (default values) in input forms
         ff_input.send_keys(str(df.loc[i, ff_label])) #add values from CSV (based on column names, they need to match forms' names
-    admin_panel.save_provider(driver) #save fees data
+    admin_panel.save_provider() #save fees data
     print(url, round((i + 1) / len(df), 2), 'completed from total', datetime.datetime.now()) #show progress of the code's execution to the user
 print("Done all done, closing chrome.")
 driver.close()
