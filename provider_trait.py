@@ -44,8 +44,37 @@ for i in range(len(df)):
         else: pass
         if re.search(trt_re, c_trt):
                 if mode == 'enable':
-                        print(i, x + '\t' + c_trt + '\t' + 'was enabled before' + '\t' + str(datetime.datetime.now()))
-                        continue
+                        if (t_start != '' and t_stop != ''):
+                                driver.implicitly_wait(5)
+                                sch_boxes = driver.find_elements_by_css_selector("div[ class *= 'scheduleButtonBox']")
+                                for s in range(len(sch_boxes)):
+                                        sch_box = driver.find_elements_by_css_selector("div[ class *= 'scheduleButtonBox']")[s]
+                                        sch_name = sch_box.find_element_by_xpath('..').find_element_by_tag_name('p').get_attribute('innerHTML')
+                                        sch_button = sch_box.find_element_by_tag_name('button')
+                                        sch_block = sch_box.find_element_by_xpath('..').find_element_by_xpath('..')
+                                        sch_forms = sch_block.find_elements_by_tag_name('input')
+                                        if sch_name == trt:
+                                                if len(sch_forms) == 0:
+                                                        sch_button.click()
+                                                time.sleep(1)
+                                                sch_forms = sch_block.find_elements_by_tag_name('input')
+                                                start_btn = sch_forms[0]
+                                                driver.execute_script("arguments[0].scrollIntoView();", start_btn)  # scroll to for the schedule start field to be visible
+                                                start_c_val = start_btn.get_attribute('value')
+                                                [start_btn.send_keys(Keys.BACKSPACE) for b in range(len(start_c_val))]
+                                                time.sleep(0.5)
+                                                start_btn.send_keys(t_start)
+                                                stop_btn = start_btn = sch_forms[1]
+                                                stop_c_val = stop_btn.get_attribute('value')
+                                                [stop_btn.send_keys(Keys.BACKSPACE) for b in range(len(start_c_val))]
+                                                time.sleep(0.5)
+                                                stop_btn.send_keys(t_stop)
+                                                break
+                                print(i, x + '\t' + c_trt + '\t' + 'was enabled before, recsheduled' + '\t' + str(datetime.datetime.now()))
+
+                        else:
+                                print(i, x + '\t' + c_trt + '\t' + 'was enabled before' + '\t' + str(datetime.datetime.now()))
+                                continue
                 elif mode == 'disable':
                         button.click()  # click button
                         driver.implicitly_wait(10)
@@ -98,6 +127,7 @@ for i in range(len(df)):
                                                 start_btn.send_keys(t_start)
                                                 stop_btn = per_fields[fld_counter - 1].find_element_by_tag_name('input')
                                                 stop_btn.send_keys(t_stop)
+                                                break
                         print(i, x + '\t' + c_trt + '\t' + 'done - enabled' + '\t' + str(datetime.datetime.now()))
                 elif mode == 'disable':
                         print(i, x + '\t' + c_trt + '\t' + 'was disabled before' + '\t' + str(datetime.datetime.now()))
