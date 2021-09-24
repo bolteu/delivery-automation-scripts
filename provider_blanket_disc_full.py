@@ -32,37 +32,41 @@ for i in range(len(df)):
         bl_disc = str(df.iloc[i, 2])
         n_p_com = str(df.iloc[i, 3])
         driver.get(x)
-        time.sleep(1.5)
         driver.implicitly_wait(100)
-        # Commission
+        #Commission
         fee_box = driver.find_element_by_name("amount")
         c_fee = driver.find_element_by_name("amount").get_attribute('value')
+        while len(c_fee) == 0:
+                fee_box = driver.find_element_by_name("amount")
+                c_fee = driver.find_element_by_name("amount").get_attribute('value')
         [fee_box.send_keys(Keys.BACKSPACE) for n in range(len(c_fee))] #delete old
-        # add new
-        time.sleep(1)
+        #add new
+        time.sleep(1.5)
         fee_box.send_keys(new_com)
-        # Blanket menu discount
+        #Blanket menu discount
         if mode == 'enable':
-                time.sleep(1)
                 bl_box = driver.find_element_by_name("blanket_menu_discount_percentage")
                 bl_am = bl_box.get_attribute('value')
-                len2 = len(bl_am)
+                while len(bl_am) == 0:
+                        bl_box = driver.find_element_by_name("blanket_menu_discount_percentage")
+                        bl_am = bl_box.get_attribute('value')
                 # delete old
-                [bl_box.send_keys(Keys.BACKSPACE) for n in range(len2)]
+                [bl_box.send_keys(Keys.BACKSPACE) for n in range(len(bl_am))]
                 # add new
                 bl_box.send_keys(bl_disc)
         elif mode == 'disable':
                 pass
-        # Tickbox
+        #Tickbox
+        time.sleep(1.5)
         bl_tick = driver.find_element_by_name('is_blanket_menu_discount_enabled')
-        bl_tick_p = bl_tick.find_element_by_xpath('..').find_element_by_xpath('..').get_attribute('class')
+        driver.execute_script("arguments[0].scrollIntoView();", bl_tick)
         if mode == 'enable':
-                if re.search('checked', bl_tick_p):
+                if bl_tick.is_selected() == True:
                         pass
                 else:
                         bl_tick.click()
         if mode == 'disable':
-                if re.search('checked', bl_tick_p):
+                if bl_tick.is_selected() == True:
                         bl_tick.click()
                 else:
                         pass
@@ -70,11 +74,13 @@ for i in range(len(df)):
         #Pickup commission
         if n_p_com == '': pass
         else:
-
-                time.sleep(1) # wait for vals to load
                 p_box = driver.find_element_by_name("takeaway_amount") # find fee
                 pickup_fee = p_box.get_attribute('value') # get pickup fee value
+                while len(pickup_fee) == 0:
+                        p_box = driver.find_element_by_name("takeaway_amount")  # find fee
+                        pickup_fee = p_box.get_attribute('value')  # get pickup fee value
                 [p_box.send_keys(Keys.BACKSPACE) for n in range(len(pickup_fee))] # check if fee is present - delete if needed
+                time.sleep(1.5)
                 p_box.send_keys(n_p_com) # new fee for pickup
         # traits config
         button = driver.find_element_by_id('mui-component-select-traitSelector')  # find traits button
@@ -121,5 +127,5 @@ for i in range(len(df)):
         driver.implicitly_wait(5)
         admin_panel.save_provider() # Save changes
         print(x, round((i + 1) / len(df), 2), 'completed from total', datetime.datetime.now())
-print("Done all done, removing credentials file & closing chrome.")
+print("Done all done, closing chrome.")
 driver.close()
