@@ -32,6 +32,7 @@ for i in range(len(df)):
         bl_disc = str(df.iloc[i, 2])
         n_p_com = str(df.iloc[i, 3])
         driver.get(x)
+        time.sleep(1.5)
         driver.implicitly_wait(100)
         #Commission
         fee_box = driver.find_element_by_name("amount")
@@ -47,9 +48,10 @@ for i in range(len(df)):
         if mode == 'enable':
                 bl_box = driver.find_element_by_name("blanket_menu_discount_percentage")
                 bl_am = bl_box.get_attribute('value')
-                while len(bl_am) == 0:
-                        bl_box = driver.find_element_by_name("blanket_menu_discount_percentage")
-                        bl_am = bl_box.get_attribute('value')
+                if bl_am != '':
+                        while len(bl_am) == 0:
+                                        bl_box = driver.find_element_by_name("blanket_menu_discount_percentage")
+                                        bl_am = bl_box.get_attribute('value')
                 # delete old
                 [bl_box.send_keys(Keys.BACKSPACE) for n in range(len(bl_am))]
                 # add new
@@ -76,9 +78,10 @@ for i in range(len(df)):
         else:
                 p_box = driver.find_element_by_name("takeaway_amount") # find fee
                 pickup_fee = p_box.get_attribute('value') # get pickup fee value
-                while len(pickup_fee) == 0:
-                        p_box = driver.find_element_by_name("takeaway_amount")  # find fee
-                        pickup_fee = p_box.get_attribute('value')  # get pickup fee value
+                if pickup_fee != '':
+                        while len(pickup_fee) == 0:
+                                p_box = driver.find_element_by_name("takeaway_amount")  # find fee
+                                pickup_fee = p_box.get_attribute('value')  # get pickup fee value
                 [p_box.send_keys(Keys.BACKSPACE) for n in range(len(pickup_fee))] # check if fee is present - delete if needed
                 time.sleep(1.5)
                 p_box.send_keys(n_p_com) # new fee for pickup
