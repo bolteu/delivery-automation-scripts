@@ -31,10 +31,8 @@ for i in range(len(df)):
         driver.implicitly_wait(100)
         # Cooking time
         ct_box = driver.find_element_by_name("average_cooking_time")
-        ct_value = ct_box.get_attribute('value')
-        len1 = len(ct_value)
         # delete old
-        [ct_box.send_keys(Keys.BACKSPACE) for n in range(len1)]
+        [ct_box.send_keys(Keys.BACKSPACE) for n in range(0,8)]
         time.sleep(1)
         ct_box.send_keys(str(df.iloc[i, 1]))
         driver.implicitly_wait(50)
