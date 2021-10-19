@@ -45,7 +45,7 @@ for i in range(len(df)):
         fee_t = fee_t[0:fee_t.find('<')] #remove irrelevant html
         if fee_t == fee_type: #check if fee type from dropdown matches the one in CSV
             fee_el.click() # click if yes
-    time.sleep(2)  # wait for the updated form's elements to appear
+    time.sleep(4)  # wait for the updated form's elements to appear
     # populate fields with data
     field_grid = fee_form.find_elements_by_css_selector("div[style *= 'grid-template-columns']")[1]  # locate grid with data fields on the fee
     fee_fields  = field_grid.find_elements_by_tag_name('input')
