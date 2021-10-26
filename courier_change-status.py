@@ -8,9 +8,16 @@ import pandas as pd
 from utils.admin_panel import AdminPanel
 from utils.get_cell_value import get_cell_value
 from settings.config import username, password, database, chromedriver, base_admin_panel_url
+from settings.config import scope, doc_url, js_dump
+import os
 import re
+from utils.google_api import api_authorize
 
-df = pd.read_csv(database)
+#Open the needed list in the Gsheet specified in config by file name
+database = api_authorize(js_dump, scope).worksheet(os.path.basename(__file__))
+df = pd.DataFrame(database.get_all_records()).fillna('') #Read data for script
+print('Spreadsheet data from', os.path.basename(__file__), 'list has been read.')
+
 driver = webdriver.Chrome(chromedriver)
 driver.maximize_window()
 columns = list(df)
