@@ -45,7 +45,7 @@ for i in range(len(df)):
         fee_t = fee_t[0:fee_t.find('<')] #remove irrelevant html
         if fee_t == fee_type: #check if fee type from dropdown matches the one in CSV
             fee_el.click() # click if yes
-    time.sleep(2)  # wait for the updated form's elements to appear
+    time.sleep(4)  # wait for the updated form's elements to appear
     # populate fields with data
     field_grid = fee_form.find_elements_by_css_selector("div[style *= 'grid-template-columns']")[1]  # locate grid with data fields on the fee
     fee_fields  = field_grid.find_elements_by_tag_name('input')
@@ -55,8 +55,8 @@ for i in range(len(df)):
         ff_label = re.sub('<span.+', '', ff_label) #get label name of the form to match it with column name to add data to the correct form
         ff_label = ff_label.replace('&nbsp;', '')
         ff_input = ff_el.find_element_by_tag_name('input') #find input form to put data there
-        ff_val = ff_input.get_attribute('value') #get current value of the form (usually it is a dummy value)
-        [ff_input.send_keys(Keys.BACKSPACE) for fff in range(len(ff_val))] # delete dummy (default values) in input forms
+        [ff_input.send_keys(Keys.BACKSPACE) for fff in range(0,16)]  # delete dummy (default values) in input forms, deletes 16 characters irrespectively of the contained data
+        # 16 characters as the date variable is the longest one to delete and it has 16 characters
         ff_input.send_keys(str(df.loc[i, ff_label])) #add values from CSV (based on column names, they need to match forms' names
     admin_panel.save_provider() #save fees data
     print(url, round((i + 1) / len(df), 2), 'completed from total', datetime.datetime.now()) #show progress of the code's execution to the user
