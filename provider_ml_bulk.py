@@ -33,12 +33,14 @@ for i in range(len(df)):
         ml_box = driver.find_element_by_name('disable_estimation_correction')
         ml_param = ml_box.find_element_by_xpath('..').find_element_by_xpath('..').get_attribute('class')
         if re.search('checked', ml_param):
-                if mode == 'enable':
+
+                if mode == 'disable':
                         continue
                 else:
                         ml_box.click()
         else:
-                if mode == 'enable':
+
+                if mode == 'disable':
                         ml_box.click()
                 else:
                         continue
