@@ -6,11 +6,11 @@ import pandas as pd
 import time
 import re
 import datetime
-from utils.admin_panel import AdminPanel
+from utils.admin_panel import AdminPanel, ignore_certificate
 from settings.config import username, password, database, chromedriver, base_admin_panel_url, old_base_admin_panel_url
 from settings.config import scope, doc_url, js_dump
 import os
-
+ignore_certificate()
 
 
 

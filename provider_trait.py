@@ -6,11 +6,12 @@ import pandas as pd
 import time
 import re
 import datetime
-from utils.admin_panel import AdminPanel
+from utils.admin_panel import AdminPanel, ignore_certificate
 from settings.config import username, password, database, chromedriver, base_admin_panel_url, old_base_admin_panel_url
 from settings.config import scope, doc_url, js_dump
 import json
 import os
+ignore_certificate()
 
 mode = input('Type in enable or disable: ') #Define if you want to add or remove
 
@@ -40,8 +41,6 @@ for i in range(len(df)):
         t_start = str(df.iloc[i, 2])  # trait start period variable
         t_stop = str(df.iloc[i, 3])  # trait stop period variable
         trt_re = trt.replace("(", "\(").replace(")", "\)")
-        if c_trt == '<span>​</span>': c_trt == ""
-        else: pass
         if re.search(trt_re, c_trt):
                 if mode == 'enable':
                         if (t_start != '' and t_stop != ''):

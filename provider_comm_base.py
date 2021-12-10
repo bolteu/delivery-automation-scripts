@@ -6,11 +6,12 @@ import pandas as pd
 import time
 import re
 import datetime
-from utils.admin_panel import AdminPanel
+from utils.admin_panel import AdminPanel, ignore_certificate
 from settings.config import username, password, database, chromedriver, base_admin_panel_url, old_base_admin_panel_url
 from settings.config import scope, doc_url, js_dump
 import json
 import os
+ignore_certificate()
 
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
@@ -37,10 +38,7 @@ for i in range(len(df)):
         c_comm = comm_button.get_attribute('innerHTML').replace('&amp;', '&') #get current commission
         comm_base = str(df.iloc[i, 1])  # assign commission variable
         comm_re = comm_base.replace("(", "\(").replace(")", "\)")
-        if c_comm == '<span>​</span>':c_comm == ""
-        else: pass
         if re.search(comm_re, c_comm):
-
                 print(i, x + '\t' + c_comm + '\t' + 'was in place before' + '\t' + str(datetime.datetime.now()))
         else:
                 comm_button.click()  # click button

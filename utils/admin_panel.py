@@ -7,6 +7,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import os
 
 from settings.config import base_admin_panel_url, old_base_admin_panel_url
 
@@ -146,3 +147,10 @@ class AdminPanel:
         sleep(0.5)
         self.driver.execute_script("arguments[0].click();", save_el)
         sleep(3)
+
+def ignore_certificate():
+    os.system('defaults write com.google.Chrome AutoSelectCertificateForUrls -array')
+    os.system(
+        '''defaults write com.google.Chrome AutoSelectCertificateForUrls -array-add -string '{"pattern":"admin.bolt.eu","filter":{"ISSUER":{"CN":"Taxify Issuing IV"}}}' ''')
+    os.system(
+        '''defaults write com.google.Chrome AutoSelectCertificateForUrls -array-add -string '{"pattern":"admin-panel.bolt.eu","filter":{"ISSUER":{"CN":"Taxify Issuing IV"}}}' ''')
