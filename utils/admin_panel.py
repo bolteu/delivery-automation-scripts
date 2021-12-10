@@ -7,7 +7,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+import os
 from settings.config import base_admin_panel_url, old_base_admin_panel_url
 
 def log(message):
@@ -31,6 +31,11 @@ def get_element_type(el):
 # Helper class to agregate common admin panel operations
 class AdminPanel:
     def __init__(self, driver):
+        os.system('defaults write com.google.Chrome AutoSelectCertificateForUrls -array')
+        os.system(
+            '''defaults write com.google.Chrome AutoSelectCertificateForUrls -array-add -string '{"pattern":"admin.bolt.eu","filter":{"ISSUER":{"CN":"Taxify Issuing IV"}}}' ''')
+        os.system(
+            '''defaults write com.google.Chrome AutoSelectCertificateForUrls -array-add -string '{"pattern":"admin-panel.bolt.eu","filter":{"ISSUER":{"CN":"Taxify Issuing IV"}}}' ''')
         self.driver = driver
 
     def collect_page_errors(self):
