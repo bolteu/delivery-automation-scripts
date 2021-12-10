@@ -38,8 +38,6 @@ for i in range(len(df)):
         c_tag = tag_button.get_attribute('innerHTML').replace('&amp;', '&') #get current trait
         tag = str(df.iloc[i, 1])  # assign tag variable
         tag_re = tag.replace("(", "\(").replace(")", "\)")
-        if c_tag == '<span>​</span>': c_tag == ""
-        else: pass
         if re.search(tag_re, c_tag):
                 if mode == 'enable':
                         print(i, x + '\t' + c_tag + '\t' + 'was enabled before' + '\t' + str(datetime.datetime.now()))

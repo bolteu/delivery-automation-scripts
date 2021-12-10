@@ -41,8 +41,6 @@ for i in range(len(df)):
         c_status = status_button.get_attribute('innerHTML').replace('&amp;', '&') #get current commission
         status = str(df.iloc[i, 1])  # assign status variable
         status_re = status.replace("(", "\(").replace(")", "\)")
-        if c_status == '<span>​</span>':c_status == ""
-        else: pass
         if re.search(status_re, c_status):
 
                 print(i, x + '\t' + c_status + '\t' + 'was in place before' + '\t' + str(datetime.datetime.now()))

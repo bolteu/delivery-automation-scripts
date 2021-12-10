@@ -38,8 +38,6 @@ for i in range(len(df)):
         c_pol = pol_button.get_attribute('innerHTML').replace('&amp;', '&') #get current policies
         pol = str(df.iloc[i, 1])  # assign pol variable
         pol_re = pol.replace("(", "\(").replace(")", "\)")
-        if c_pol == '<span>​</span>': c_pol == ""
-        else: pass
         if re.search(pol_re, c_pol):
                 if mode == 'enable':
                         print(i, x + '\t' + c_pol + '\t' + 'was enabled before' + '\t' + str(datetime.datetime.now()))
