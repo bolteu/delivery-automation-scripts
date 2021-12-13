@@ -50,7 +50,7 @@ for index, row in df.iterrows():
         extra_step_info.append('New courier page: ' + url)
         pattern = 'couriers/(\d+)'
         new_courier_id = re.search(pattern, url)[1]
-        print(" [OK]Courier " + courier_id + " is copied to " + new_courier_id)
+        print(" [OK]Courier " + str(courier_id) + " is copied to " + str(new_courier_id))
     except:
         print(" [FAILED]")
         details = admin_panel.collect_page_errors() or (extra_step_info + [script_step + " error"])
