@@ -79,7 +79,6 @@ for i in range(len(df)):
         c_trt = button.get_attribute('innerHTML')  # get current trait
         trt = 'Blanket campaign'  # assign trait variable
         trt_re = trt.replace("(", "\(").replace(")", "\)")
-        if c_trt == '<span>​</span>': c_trt == ""
         driver.execute_script("arguments[0].scrollIntoView();", button)  # scroll down to the button
         if mode == 'enable':
                 if re.search(trt_re, c_trt): pass

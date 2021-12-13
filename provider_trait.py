@@ -40,8 +40,6 @@ for i in range(len(df)):
         t_start = str(df.iloc[i, 2])  # trait start period variable
         t_stop = str(df.iloc[i, 3])  # trait stop period variable
         trt_re = trt.replace("(", "\(").replace(")", "\)")
-        if c_trt == '<span>​</span>': c_trt == ""
-        else: pass
         if re.search(trt_re, c_trt):
                 if mode == 'enable':
                         if (t_start != '' and t_stop != ''):

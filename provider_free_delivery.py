@@ -69,47 +69,44 @@ for i in range(len(df)):
         c_trt = button.get_attribute('innerHTML').replace('&amp;', '&')  # get current trait
         trt = str(df.iloc[i, 5])  # assign trait variable
         trt_re = trt.replace("(", "\(").replace(")", "\)")
-        if c_trt == '<span>​</span>': c_trt == ""
-        if trt == '': pass
+        if re.search(trt_re, c_trt):
+                if mode == 'enable':
+                        pass
+                elif mode == 'disable':
+                        button.click()  # click button
+                        driver.implicitly_wait(10)
+                        lst = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')
+                        for t in range(len(lst)):
+                                item = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')[t]
+                                driver.execute_script("arguments[0].scrollIntoView();", item)
+                                itemt = item.get_attribute('innerHTML').replace('&amp;', '&')
+                                itemt = re.sub('<span.+', "", itemt)
+                                if itemt == trt:
+                                        item.click()
+                                        time.sleep(1)
+                                        item.send_keys(Keys.ESCAPE)
+                                        break
+                        try: item.send_keys(Keys.ESCAPE)
+                        except: pass
         else:
-                if re.search(trt_re, c_trt):
-                        if mode == 'enable':
-                                pass
-                        elif mode == 'disable':
-                                button.click()  # click button
-                                driver.implicitly_wait(10)
-                                lst = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')
-                                for t in range(len(lst)):
-                                        item = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')[t]
-                                        driver.execute_script("arguments[0].scrollIntoView();", item)
-                                        itemt = item.get_attribute('innerHTML').replace('&amp;', '&')
-                                        itemt = re.sub('<span.+', "", itemt)
-                                        if itemt == trt:
-                                                item.click()
-                                                time.sleep(1)
-                                                item.send_keys(Keys.ESCAPE)
-                                                break
-                                try: item.send_keys(Keys.ESCAPE)
-                                except: pass
-                else:
-                        if mode == 'enable':
-                                button.click()  # click button
-                                driver.implicitly_wait(10)
-                                lst = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')
-                                for t in range(len(lst)):
-                                        item = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')[t]
-                                        driver.execute_script("arguments[0].scrollIntoView();", item)
-                                        itemt = item.get_attribute('innerHTML').replace('&amp;', '&')
-                                        itemt = re.sub('<span.+', "", itemt)
-                                        if itemt == trt:
-                                                item.click()
-                                                time.sleep(1)
-                                                item.send_keys(Keys.ESCAPE)
-                                                break
-                                try: item.send_keys(Keys.ESCAPE)
-                                except: pass
-                        elif mode == 'disable':
-                                pass
+                if mode == 'enable':
+                        button.click()  # click button
+                        driver.implicitly_wait(10)
+                        lst = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')
+                        for t in range(len(lst)):
+                                item = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')[t]
+                                driver.execute_script("arguments[0].scrollIntoView();", item)
+                                itemt = item.get_attribute('innerHTML').replace('&amp;', '&')
+                                itemt = re.sub('<span.+', "", itemt)
+                                if itemt == trt:
+                                        item.click()
+                                        time.sleep(1)
+                                        item.send_keys(Keys.ESCAPE)
+                                        break
+                        try: item.send_keys(Keys.ESCAPE)
+                        except: pass
+                elif mode == 'disable':
+                        pass
         # Save changes
         admin_panel.save_provider()
         print(x, round((i + 1) / len(df), 2), 'completed from total', datetime.datetime.now())
