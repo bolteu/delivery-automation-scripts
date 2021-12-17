@@ -2,7 +2,6 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
 import pandas as pd
 import time
 import re
@@ -24,20 +23,28 @@ driver = webdriver.Chrome(chromedriver) #Initialise driver from bin folder
 admin_panel = AdminPanel(driver = driver)
 admin_panel.login(username = username, password = password)
 driver.maximize_window()  # makes it full screen
-#Automation execution
+
 for i in range(len(df)):
-    comm_email = str(df.iloc[i, 1])
-    x = base_admin_panel_url + "/delivery/providers/" + str(df.iloc[i, 0])
-    driver.get(x) #open provider profile in admin
-    time.sleep(2) #wait a bit for the values in all forms to load
-    driver.implicitly_wait(10) #timeout waiting step
-    c_email_box = driver.find_element(By.NAME,'communication_email')  # locate element where the comm email is stored
-    driver.execute_script("arguments[0].scrollIntoView();", c_email_box) #scroll page to the element to interact with it
-    c_email_val = c_email_box.get_attribute('value') #get current value of comm email
-    [c_email_box.send_keys(Keys.BACKSPACE) for c in range(len(c_email_val))] #remove old comm email
-    time.sleep(1)
-    c_email_box.send_keys(comm_email) #add new comm email (from database)
-    admin_panel.save_provider() #save changes block
-    print(x, round((i + 1) / len(df), 2), 'completed from total', datetime.datetime.now())
+        x = base_admin_panel_url + "/delivery/providers/" + str(df.iloc[i, 0])
+        mode = str(df.iloc[i, 1])
+        driver.get(x)
+        time.sleep(1)
+        driver.implicitly_wait(100)
+        robo_box = driver.find_element_by_name('use_custom_settings')
+        robo_param = robo_box.find_element_by_xpath('..').find_element_by_xpath('..').get_attribute('class')
+        if re.search('checked', robo_param):
+                if mode == 'check':
+                        continue
+                else:
+                        robo_box.click()
+        else:
+                if mode == 'check':
+                        robo_box.click()
+                else:
+                        continue
+        # Save changes
+        admin_panel.save_provider()
+        print(x, round((i + 1) / len(df), 2), 'completed from total', datetime.datetime.now())
 print("Done all done, closing chrome.")
 driver.close()
+
