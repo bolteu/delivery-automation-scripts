@@ -25,8 +25,8 @@ admin_panel.login(username = username, password = password)
 driver.maximize_window()  # makes it full screen
 
 for i in range(len(df)):
-        x = base_admin_panel_url + "/delivery/providers/" + str(df.iloc[i, 0])
-        param = str(df.iloc[i, 1])
+        x = base_admin_panel_url + "/delivery/providers/" + str(df.iat[i, 0])
+        param = str(df.iat[i, 1])
         param_re = param.replace("(", "\(").replace(")", "\)")
         driver.get(x)
         driver.implicitly_wait(100)
