@@ -33,9 +33,7 @@ class AdminPanel:
     def __init__(self, driver):
         os.system('defaults write com.google.Chrome AutoSelectCertificateForUrls -array')
         os.system(
-            '''defaults write com.google.Chrome AutoSelectCertificateForUrls -array-add -string '{"pattern":"admin.bolt.eu","filter":{"ISSUER":{"CN":"Taxify Issuing IV"}}}' ''')
-        os.system(
-            '''defaults write com.google.Chrome AutoSelectCertificateForUrls -array-add -string '{"pattern":"admin-panel.bolt.eu","filter":{"ISSUER":{"CN":"Taxify Issuing IV"}}}' ''')
+            '''defaults write com.google.Chrome AutoSelectCertificateForUrls -array-add -string '{"pattern":"*.bolt.eu","filter":{"ISSUER":{"CN":"Taxify Issuing IV"}}}' ''')
         self.driver = driver
 
     def collect_page_errors(self):
