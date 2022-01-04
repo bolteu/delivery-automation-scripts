@@ -25,7 +25,7 @@ admin_panel.login(username = username, password = password)
 driver.maximize_window()  # makes it full screen
 #Code execution
 for i in range(len(df)):
-        x = base_admin_panel_url + "/delivery/providers/" + str(df.iloc[i, 0]) #define link to provider
+        x = admin_panel.provider_url(df.iloc[i, 0]) #define link to provider
         driver.get(x) #open provider
         cols = df.columns.values.tolist()  # Get column titles
         driver.implicitly_wait(10)

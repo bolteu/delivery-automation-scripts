@@ -27,7 +27,7 @@ driver.maximize_window()  # makes it full screen
 #Automation execution
 for i in range(len(df)):
     dummy_phone = str(random.randint(1, 10)) # test line to see if phones are saved after the code is executed
-    url = base_admin_panel_url + "/delivery/providers/" + str(df.iloc[i, 0]) #define link to provider in admin
+    url = admin_panel.provider_url(df.iloc[i, 0]) #define link to provider in admin
     driver.get(url) #open provider profile in admin
     time.sleep(1.5) #wait a bit for the values in all forms to load
     driver.implicitly_wait(10) #timeout waiting step

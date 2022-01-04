@@ -25,7 +25,7 @@ admin_panel.login(username = username, password = password)
 driver.maximize_window()  # makes it full screen
 #Automation execution
 for i in range(len(df)):
-    url = base_admin_panel_url + "/delivery/providers/" + str(df.iloc[i, 0])  + "?tab=fees"
+    url = admin_panel.provider_url(df.iloc[i, 0]) + "?tab=fees"
     fee_type = str(df.iloc[i,1])
     driver.get(url)
     driver.implicitly_wait(10)

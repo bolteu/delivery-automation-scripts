@@ -27,7 +27,7 @@ driver.maximize_window()  # makes it full screen
 #Automation execution
 for i in range(len(df)):
     comm_email = str(df.iloc[i, 1])
-    x = base_admin_panel_url + "/delivery/providers/" + str(df.iloc[i, 0])
+    x = admin_panel.provider_url(df.iloc[i, 0])
     driver.get(x) #open provider profile in admin
     time.sleep(2) #wait a bit for the values in all forms to load
     driver.implicitly_wait(10) #timeout waiting step
