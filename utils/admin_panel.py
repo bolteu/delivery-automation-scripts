@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
-from settings.config import base_admin_panel_url, old_base_admin_panel_url
+from settings.config import base_admin_panel_url, old_base_admin_panel_url, provider_scope
 
 def log(message):
     if False:
@@ -149,3 +149,5 @@ class AdminPanel:
         sleep(0.5)
         self.driver.execute_script("arguments[0].click();", save_el)
         sleep(3)
+    def provider_url(self, id):
+        return base_admin_panel_url + provider_scope + "providers/" + str(id)

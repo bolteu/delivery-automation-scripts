@@ -26,7 +26,7 @@ driver.maximize_window()  # makes it full screen
 driver.implicitly_wait(50)
 #execute
 for i in range(len(df)):
-    x = base_admin_panel_url + "/delivery/providers/" + str(df.iloc[i, 0])
+    x = admin_panel.provider_url(df.iloc[i, 0])
     driver.get(x)
     driver.implicitly_wait(100)
     #version config
