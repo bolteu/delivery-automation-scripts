@@ -8,6 +8,7 @@ password = "123412341234"
 
 base_admin_panel_url = ''
 old_base_admin_panel_url = ''
+provider_scope = '/delivery-provider/'
 
 # <editor-fold desc="Gsheet API prerequisites">
 json_credentials = 'auth.json'
