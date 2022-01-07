@@ -28,10 +28,12 @@ driver.maximize_window()  # makes it full screen
 for i in range(len(df)):
         x = admin_panel.provider_url(df.iloc[i, 0])
         n_fee = str(df.iloc[i, 1])
+        param = str(df.iat[i, 2])
         driver.get(x)
         time.sleep(2)
         driver.implicitly_wait(100)
         fee_box = driver.find_element_by_name("amount")
+        if param == 'takeaway': fee_box = driver.find_element_by_name('takeaway_amount')
         c_fee = fee_box.get_attribute('value')
         # remove old fee
         [fee_box.send_keys(Keys.BACKSPACE) for n in range(len(c_fee))]  # delete old
