@@ -36,7 +36,7 @@ for i in range(len(df)):
         if param == 'takeaway': fee_box = driver.find_element_by_name('takeaway_amount')
         c_fee = fee_box.get_attribute('value')
         # remove old fee
-        [fee_box.send_keys(Keys.BACKSPACE) for n in range(len(10))]  # delete old
+        [fee_box.send_keys(Keys.BACKSPACE) for n in range(10)]  # delete old
         #add new fee
         time.sleep(1)
         fee_box.send_keys(n_fee)
