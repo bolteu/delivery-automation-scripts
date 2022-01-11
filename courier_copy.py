@@ -33,7 +33,7 @@ for index, row in df.iterrows():
         script_step = 'copy courier'
         driver.implicitly_wait(3)
         # partner profile:
-        driver.get(base_admin_panel_url + "/delivery-courier/couriers/copy/" + courier_id)
+        driver.get(base_admin_panel_url + "/delivery-courier/couriers/copy/" + str(courier_id))
         # create partner profile:
         for column in columns:
             if column == 'courier_id':
