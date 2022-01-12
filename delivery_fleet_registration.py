@@ -7,7 +7,7 @@ from settings.config import username, password, database, chromedriver, base_adm
 import re
 
 df = pd.read_csv(database)
-driver = webdriver.Chrome(chromedriver)
+driver = webdriver.Chrome(service = chromedriver)
 columns = list(df)
 admin_panel = AdminPanel(driver=driver)
 # ​ Admin-panel login

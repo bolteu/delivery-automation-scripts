@@ -19,7 +19,7 @@ database = spreadsheet.worksheet(sheetname) #Open the needed list
 df = pd.DataFrame(database.get_all_records()).fillna('') #Read data for script
 df.drop_duplicates(subset = df.columns[0], inplace = True) #make a distinct df with providers to avoid duplicates
 print('Spreadsheet data from', sheetname, 'list has been read.')
-driver = webdriver.Chrome(chromedriver) #Initialise driver from bin folder
+driver = webdriver.Chrome(service = chromedriver) #Initialise driver from bin folder
 admin_panel = AdminPanel(driver = driver)
 admin_panel.login(username = username, password = password)
 driver.maximize_window()  # makes it full screen
