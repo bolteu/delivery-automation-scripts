@@ -5,12 +5,13 @@ from time import sleep
 from selenium import webdriver
 import pandas as pd
 from utils.admin_panel import AdminPanel
+from utils.driver import driver
 from utils.get_cell_value import get_cell_value
 from settings.config import username, password, database, chromedriver, base_admin_panel_url
 import re
 
 df = pd.read_csv(database)
-driver = webdriver.Chrome(chromedriver)
+
 driver.maximize_window()
 columns = list(df)
 total_lines = len(list(df.iterrows()))

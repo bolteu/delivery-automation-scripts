@@ -8,6 +8,7 @@ import time
 import re
 import datetime
 from utils.admin_panel import AdminPanel
+from utils.driver import driver
 from settings.config import username, password, database, chromedriver, base_admin_panel_url, old_base_admin_panel_url
 from settings.config import scope, doc_url, js_dump
 import os
@@ -19,7 +20,7 @@ spreadsheet = client.open_by_url(doc_url) #Open spreadsheet
 database = spreadsheet.worksheet(sheetname) #Open the needed list
 df = pd.DataFrame(database.get_all_records()).fillna('') #Read data for script
 print('Spreadsheet data from', sheetname, 'list has been read.')
-driver = webdriver.Chrome(chromedriver) #Initialise driver from bin folder
+
 admin_panel = AdminPanel(driver = driver)
 admin_panel.login(username = username, password = password)
 driver.maximize_window()  # makes it full screen
