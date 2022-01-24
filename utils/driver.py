@@ -3,5 +3,5 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver import  Chrome
 
 
-driver =  Chrome(service = Service(ChromeDriverManager().install()))
-driver.minimize_window()
+driver =  Chrome(service =  Service(ChromeDriverManager().install()))
+
