@@ -1,6 +1,4 @@
 # This Python file uses the following encoding: utf-8
-
-# In case of any questions contact: krzysztof.witkowski@bolt.eu
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
