@@ -32,9 +32,9 @@ for index, row in df.iterrows():
     try:
         script_step = 'update courier'
         driver.implicitly_wait(20)
-        # partner profile:
+        # courier profile:
         driver.get(base_admin_panel_url + "/delivery-courier/couriers/" + str(courier_id))
-        # create partner profile:
+        # update courier profile:
         for column in columns:
             if column == 'courier_id': continue
             el = driver.find_element(By.NAME, column)
