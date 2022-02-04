@@ -26,6 +26,8 @@ def get_element_type(el):
     if el.get_attribute('type') == 'checkbox':
         return 'checkbox'
     return 'text'
+def get_unique(array):
+    return list(dict.fromkeys(array))
 
 
 # Helper class to agregate common admin panel operations
