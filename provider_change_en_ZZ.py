@@ -31,11 +31,11 @@ for i in range(len(df)):
         driver.get(x)
         driver.implicitly_wait(10)
         try:
-                en_zz_box = driver.find_element_by_xpath("//input[@name='en-ZZ']") #find en_zz box
+                name_zz_box = driver.find_element_by_xpath("//input[contains(@name, '-ZZ')]") #find zz box
                 time.sleep(2)
-                current_desc = en_zz_box.get_attribute('value') #get current description
-                [en_zz_box.send_keys(Keys.BACKSPACE) for l in range(len(current_desc))] #to delete previous value
-                en_zz_box.send_keys(description) #to add the new description
+                current_desc = name_zz_box.get_attribute('value') #get current description
+                [name_zz_box.send_keys(Keys.BACKSPACE) for l in range(len(current_desc))] #to delete previous value
+                name_zz_box.send_keys(description) #to add the new description
                 admin_panel.save_provider()
                 print(i, x + '\t' + description + '\t' + 'done - put in place' + '\t' + str(datetime.datetime.now()))
         except:
