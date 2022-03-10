@@ -64,6 +64,8 @@ class AdminPanel:
         self.driver.find_element_by_name("username").send_keys(username)
         self.driver.find_element_by_name("password").send_keys(password)
         self.driver.find_element_by_xpath("//span[contains(text(),'Login')]").click()
+        wait = WebDriverWait(self.driver, 5)
+        wait.until(EC.url_to_be(f'{base_admin_panel_url}/'))
 
     def old_login(self, username, password):
         self.driver.get(old_base_admin_panel_url + "/delivery/Courier/courier/?root_id=1474185")
