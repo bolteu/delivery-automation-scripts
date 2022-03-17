@@ -17,7 +17,6 @@ client = gspread.authorize(creds) #Connect to API
 spreadsheet = client.open_by_url(doc_url) #Open spreadsheet
 database = spreadsheet.worksheet(sheetname) #Open the needed list
 df = pd.DataFrame(database.get_all_records()).fillna('') #Read data for script
-df.drop_duplicates(subset = df.columns[0], inplace = True) #make a distinct df with providers to avoid duplicates
 print('Spreadsheet data from', sheetname, 'list has been read.')
 driver = webdriver.Chrome(chromedriver) #Initialise driver from bin folder
 admin_panel = AdminPanel(driver = driver)
@@ -27,6 +26,7 @@ driver.implicitly_wait(50)
 #execute
 for i in range(len(df)):
     x = admin_panel.provider_url(df.iloc[i, 0])
+    policy_to_apply = df.iloc[i, 1] #get cost sharing policy to apply
     driver.get(x)
     driver.implicitly_wait(100)
     #version config
@@ -34,8 +34,8 @@ for i in range(len(df)):
     time.sleep(2)
     driver.execute_script("arguments[0].scrollIntoView();", button)  # scroll down to the button
     curr_v = button.get_attribute('innerHTML') #get current version
-    if "V2" in curr_v:
-        print(i, x + '\t' + 'V2 has been already assigned' + '\t' + str(datetime.datetime.now())) #notify if V2 is already assigned
+    if policy_to_apply in curr_v:
+        print(i, x + '\t' + f'{policy_to_apply} has been already assigned' + '\t' + str(datetime.datetime.now())) #notify if V2 is already assignee
     else:
         button.click()  # click button
         driver.implicitly_wait(10)
@@ -44,13 +44,16 @@ for i in range(len(df)):
             item = lst[t]
             driver.execute_script("arguments[0].scrollIntoView();", item)
             itemt = item.get_attribute('innerHTML')
-            if 'V2' in itemt:
+            if policy_to_apply in itemt:
                 item.click()
                 time.sleep(1)
-                print(i, x + '\t' + 'done - V2 assigned' + '\t' + str(datetime.datetime.now()))
+                print(i, x + '\t' + f'done - {policy_to_apply} assigned' + '\t' + str(datetime.datetime.now()))
                 admin_panel.save_provider() #save only if v2 was assigned rn, if it was assigned before there is no this step
-                break
+                break #edit here!!!!
     try: item.send_keys(Keys.ESCAPE)
     except: pass
+
+
 print('All done! Closing chrome.')
 driver.close()
+
