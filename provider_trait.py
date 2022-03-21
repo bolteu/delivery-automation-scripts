@@ -36,11 +36,12 @@ for i in range(len(df)):
         driver.execute_script("arguments[0].scrollIntoView();", button)  # scroll down to the button
         time.sleep(1.5)
         c_trt = button.get_attribute('innerHTML').replace('&amp;', '&') #get current trait
+        c_trt_list = c_trt.split(sep = ', ')
         trt = str(df.iloc[i, 1])  # assign trait variable
         t_start = str(df.iloc[i, 2])  # trait start period variable
         t_stop = str(df.iloc[i, 3])  # trait stop period variable
         trt_re = trt.replace("(", "\(").replace(")", "\)")
-        if re.search(trt_re, c_trt):
+        if trt_re in c_trt_list:
                 if mode == 'enable':
                         if (t_start != '' and t_stop != ''):
                                 driver.implicitly_wait(5)
