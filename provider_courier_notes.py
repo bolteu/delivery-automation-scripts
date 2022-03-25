@@ -31,7 +31,7 @@ for i in range(len(df)):
         driver.get(x) #open provider url
         driver.implicitly_wait(20)
         c_setup = driver.find_element(By.XPATH, "// p[contains(text(), 'Courier setup')]").find_element(By.XPATH, "..") #find courier notes section
-        time.sleep(3.5) #wait for elements' values to load: change this value to a higher
+        time.sleep(3.5) #wait for elements' values to load: change this value to a higher in case of problems
         for c in cols[1:]:
                 field = c_setup.find_element(By.NAME, c)
                 [field.send_keys(Keys.BACKSPACE) for i in range(len(field.get_attribute('innerHTML')))] #remove old
