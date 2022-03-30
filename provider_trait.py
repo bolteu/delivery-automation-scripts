@@ -3,6 +3,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import pandas as pd
+mode = input('Type in enable or disable: ') #Define if you want to add or remove
+from utils.driver import driver
 import time
 import re
 import datetime
@@ -12,7 +14,6 @@ from settings.config import scope, doc_url, js_dump
 import json
 import os
 
-mode = input('Type in enable or disable: ') #Define if you want to add or remove
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope)
 sheetname = os.path.basename(__file__) #get name of the current script and use it to find a list with same name in Gsheet file
@@ -21,7 +22,7 @@ spreadsheet = client.open_by_url(doc_url) #Open spreadsheet
 database = spreadsheet.worksheet(sheetname) #Open the needed list
 df = pd.DataFrame(database.get_all_records()).fillna('') #Read data for script
 print('Spreadsheet data from', sheetname, 'list has been read.')
-driver = webdriver.Chrome(chromedriver) #Initialise driver from bin folder
+ #Initialise driver from bin folder
 admin_panel = AdminPanel(driver = driver)
 admin_panel.login(username = username, password = password)
 driver.maximize_window()  # makes it full screen

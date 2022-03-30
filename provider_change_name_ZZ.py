@@ -3,6 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import pandas as pd
+from utils.driver import driver
 import time
 import re
 import datetime
@@ -20,7 +21,7 @@ spreadsheet = client.open_by_url(doc_url) #Open spreadsheet
 database = spreadsheet.worksheet(sheetname) #Open the needed list
 df = pd.DataFrame(database.get_all_records()).fillna('') #Read data for script
 print('Spreadsheet data from', sheetname, 'list has been read.')
-driver = webdriver.Chrome(chromedriver) #Initialise driver from bin folder
+ #Initialise driver from bin folder
 admin_panel = AdminPanel(driver = driver)
 admin_panel.login(username = username, password = password)
 driver.maximize_window()  # makes it full screen
