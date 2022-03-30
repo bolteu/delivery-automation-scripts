@@ -36,7 +36,9 @@ for i in range(len(df)):
         driver.execute_script("arguments[0].scrollIntoView();", button)  # scroll down to the button
         time.sleep(1.5)
         c_trt = button.get_attribute('innerHTML').replace('&amp;', '&') #get current trait
-        c_trt_list = c_trt.split(sep = ', ')
+        c_trt_list = []
+        for tag in driver.find_elements_by_css_selector("p[ class *= 'MuiTypography-root schedule__scheduleTraitTitle--x+WPI MuiTypography-body1']"):
+                c_trt_list.append(tag.get_attribute('innerHTML')) #get current traits one by one
         trt = str(df.iloc[i, 1])  # assign trait variable
         t_start = str(df.iloc[i, 2])  # trait start period variable
         t_stop = str(df.iloc[i, 3])  # trait stop period variable
