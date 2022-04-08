@@ -110,15 +110,15 @@ for i in range(len(df)):
                 pass
             print(i, x + '\t' + sub_reason + '\t' + 'sub reason done - put in place' + '\t' + str(datetime.datetime.now()))
 
-            if comment !='':
-                comm_box = driver.find_element_by_name('ops_comment') #to fetch the comments box
-                comm_box.send_keys(comment)
+        if comment !='':
+            comm_box = driver.find_element_by_name('ops_comment') #to fetch the comments box
+            comm_box.send_keys(comment)
 
-                try:
-                    item.send_keys(Keys.ESCAPE)
-                except:
-                    pass
-                print(i, x + '\t' + comment + '\t' + 'comment done - put in place' + '\t' + str(datetime.datetime.now()))
+            try:
+                item.send_keys(Keys.ESCAPE)
+            except:
+                pass
+            print(i, x + '\t' + comment + '\t' + 'comment done - put in place' + '\t' + str(datetime.datetime.now()))
 
         admin_panel.save_provider()
 print("Done all done, closing chrome.")
