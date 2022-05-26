@@ -32,7 +32,8 @@ for courier_id in get_unique(df['courier_id']):
         try:
             for c in comments:
                 comms_box = driver.find_element(By.XPATH, "//p[contains(text(),'Comments')]").find_element(By.XPATH, "..")
-                comms_box.find_element(By.CSS_SELECTOR, "a[role = 'button']").click() #open comment field
+                comms_button = comms_box.find_element(By.XPATH, "//span[contains(text(),'Create')]")
+                comms_button.click()
                 admin_panel.set_form_value('text', c)
                 driver.find_element(By.XPATH, "//span[contains(text(),'Add comment')]").find_element(By.XPATH, "..").click()
             print(f"[OK]Courier {courier_id} comments added.")
