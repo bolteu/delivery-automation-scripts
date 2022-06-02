@@ -1,5 +1,6 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import pandas as pd
@@ -27,15 +28,16 @@ driver.maximize_window()  # makes it full screen
 
 for i in range(len(df)):
         x = admin_panel.provider_url(df.iloc[i, 0])
-        n_p_earn = str(df.iloc[i, 1])
+        n_p_earn, n_d_earn = str(df.iloc[i, 1]), str(df.iloc[i, 2])
         driver.get(x)
         time.sleep(1.5)
         driver.implicitly_wait(100)
-        p_earn_box = driver.find_element_by_name('pickup') #find c_box button
-        c_pearn = p_earn_box.get_attribute('value') #get_current courier pickup earning
-        [p_earn_box.send_keys(Keys.BACKSPACE) for n in range(len(c_pearn))] #get len of current value
-        time.sleep(1)
-        p_earn_box.send_keys(n_p_earn) #Add new value
+        p_earn_box = driver.find_element(By.NAME, 'pickup')  #find courier pickup earning box
+        d_earn_box = driver.find_element(By.NAME, 'dropoff') #find courier dropoff earning box
+        [p_earn_box.send_keys(Keys.BACKSPACE) for n in range(20)] #delete old value of pickup earning
+        [d_earn_box.send_keys(Keys.BACKSPACE) for n in range(20)]  # delete old value of dropoff earning
+        p_earn_box.send_keys(n_p_earn) #Add new value for pickup earning
+        d_earn_box.send_keys(n_d_earn)  # Add new value for pickup earning
         admin_panel.save_provider() #SAVE
         print(x, round((i + 1) / len(df), 2), 'completed from total', datetime.datetime.now())
 print("Done all done, closing chrome.")
