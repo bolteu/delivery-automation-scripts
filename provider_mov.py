@@ -2,6 +2,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 import pandas as pd
 from utils.driver import driver
 import time
@@ -28,16 +29,21 @@ driver.maximize_window()  # makes it full screen
 for i in range(len(df)):
         x = admin_panel.provider_url(df.iloc[i, 0])
         n_mov = str(df.iloc[i, 1])
+        n_msof = str(df.iloc[i, 2])
         driver.get(x)
         time.sleep(1.5)
         driver.implicitly_wait(100)
-        mov_box = driver.find_element_by_name('min_order_price')
-        mov_c = mov_box.get_attribute('value') #get_MOV
-        #get MOV_len
-        [mov_box.send_keys(Keys.BACKSPACE) for n in range(len(mov_c))] # remove old fee
+        mov_box = driver.find_element(By.NAME, 'min_order_price')
+        [mov_box.send_keys(Keys.BACKSPACE) for n in range(0,15)] # remove old fee max 15 characters
         time.sleep(1)
         mov_box.send_keys(n_mov) #add new fee
+        time.sleep(1)
+        msof_box = driver.find_element(By.NAME, 'small_order_fee_cap')
+        [msof_box.send_keys(Keys.BACKSPACE) for n in range(0,15)]  # remove old MSOF max 15 characters
+        time.sleep(1)
+        msof_box.send_keys(n_msof)  # add new MSOF fee
         # Save changes
+        time.sleep(1)
         admin_panel.save_provider()
         print(x, round((i + 1) / len(df), 2), 'completed from total', datetime.datetime.now())
 print("Done all done, closing chrome.")
