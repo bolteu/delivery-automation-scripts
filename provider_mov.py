@@ -13,7 +13,6 @@ from settings.config import username, password, database, chromedriver, base_adm
 from settings.config import scope, doc_url, js_dump
 import json
 import os
-from selenium.webdriver.common.by import By
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
 sheetname = os.path.basename(__file__) #get name of the current script and use it to find a list with same name in Gsheet file

@@ -13,7 +13,6 @@ from settings.config import scope, doc_url, js_dump
 import json
 import os
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.by import By
 
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
