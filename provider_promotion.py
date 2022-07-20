@@ -13,6 +13,7 @@ from settings.config import username, password, database, chromedriver, base_adm
 from settings.config import scope, doc_url, js_dump
 import json
 import os
+from selenium.webdriver.common.by import By
 
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
@@ -32,10 +33,10 @@ for i in range(len(df)):
         cols = df.columns.values.tolist()  # Get column titles
         driver.get(x) #open provider url
         driver.implicitly_wait(10)
-        pc_box = driver.find_element_by_name('is_promotion_enabled') #Find Promotions checkbox element
+        pc_box = driver.find_element(By.NAME, 'is_promotion_enabled') #Find Promotions checkbox element
         time.sleep(1)
         driver.execute_script("arguments[0].scrollIntoView();", pc_box)  # Scroll down to the button
-        promo_param = pc_box.find_element_by_xpath('..').find_element_by_xpath('..').get_attribute('class')
+        promo_param = pc_box.find_element(By.XPATH, '..').find_element(By.XPATH, '..').get_attribute('class')
         if re.search('checked', promo_param):
                 if mode == 'enable': pass
                 elif mode == 'disable': pc_box.click()
@@ -43,12 +44,12 @@ for i in range(len(df)):
                 if mode == 'enable': pc_box.click()
                 elif mode == 'disable': pass
         driver.implicitly_wait(10)
-        promo_block = driver.find_element_by_xpath("// p[contains(text(), 'Promotions')]").find_element_by_xpath('..')
-        p_boxes = promo_block.find_elements_by_css_selector("div[style *= 'grid-column:']")
+        promo_block = driver.find_element(By.XPATH, "// p[contains(text(), 'Promotions')]").find_element(By.XPATH, '..')
+        p_boxes = promo_block.find_elements(By.CSS_SELECTOR, "div[style *= 'grid-column:']")
         for p in range(len(p_boxes)):
                 if p == 0: continue
-                p_label = p_boxes[p].find_element_by_tag_name('label').get_attribute('innerHTML')
-                i_form = p_boxes[p].find_elements_by_tag_name('textarea')[0]
+                p_label = p_boxes[p].find_element(By.TAG_NAME, 'label').get_attribute('innerHTML')
+                i_form = p_boxes[p].find_elements(By.TAG_NAME, 'textarea')[0]
                 for c in range(len(cols)):
                         col_name = cols[c]
                         if c == 0: continue  # skip first column data

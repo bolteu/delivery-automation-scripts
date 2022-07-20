@@ -12,6 +12,7 @@ from settings.config import username, password, database, chromedriver, base_adm
 from settings.config import scope, doc_url, js_dump
 import json
 import os
+from selenium.webdriver.common.by import By
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
 sheetname = os.path.basename(__file__) #get name of the current script and use it to find a list with same name in Gsheet file
@@ -31,11 +32,11 @@ for i in range(len(df)):
         #print(x)
         driver.get(x)
         driver.implicitly_wait(100)
-        layout_button = driver.find_element_by_id('mui-component-select-menu_layout_in_eater_app') #find layout button
+        layout_button = driver.find_element(By.ID, 'mui-component-select-menu_layout_in_eater_app') #find layout button
         driver.execute_script("arguments[0].scrollIntoView();", layout_button)  # scroll down to the button
         time.sleep(3)
         layout_button.click()
-        lst = driver.find_elements_by_xpath('//*[@id="menu-menu_layout_in_eater_app"]/div[3]/ul/li[*]')
+        lst = driver.find_elements(By.XPATH, '//*[@id="menu-menu_layout_in_eater_app"]/div[3]/ul/li[*]')
         for item in lst:
                 item_c = item.get_attribute('innerHTML')
                 item_c = re.findall("(.+?)<span", item_c)[0]

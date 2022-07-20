@@ -13,6 +13,7 @@ from settings.config import username, password, database, chromedriver, base_adm
 from settings.config import scope, doc_url, js_dump
 import json
 import os
+from selenium.webdriver.common.by import By
 
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope)
@@ -32,14 +33,14 @@ for i in range(len(df)):
         driver.get(x)
         driver.implicitly_wait(100)
         #traits config
-        button = driver.find_element_by_id('mui-component-select-traitSelector') #find traits button
+        button = driver.find_element(By.ID, 'mui-component-select-traitSelector') #find traits button
         time.sleep(1.5)
         driver.execute_script("arguments[0].scrollIntoView();", button)  # scroll down to the button
         time.sleep(1.5)
         c_trt = button.get_attribute('innerHTML').replace('&amp;', '&') #get current trait
         c_trt_list = []
         if c_trt not in ('<span>​</span>', '', '<span></span>'):
-                for tag in driver.find_elements_by_css_selector("p[ class *= 'MuiTypography-root schedule__scheduleTraitTitle--x+WPI MuiTypography-body1']"):
+                for tag in driver.find_elements(By.CSS_SELECTOR, "p[ class *= 'MuiTypography-root schedule__scheduleTraitTitle--x+WPI MuiTypography-body1']"):
                         c_trt_list.append(tag.get_attribute('innerHTML')) #get current traits one by one
         trt = str(df.iloc[i, 1])  # assign trait variable
         t_start = str(df.iloc[i, 2])  # trait start period variable
@@ -49,18 +50,18 @@ for i in range(len(df)):
                 if mode == 'enable':
                         if (t_start != '' and t_stop != ''):
                                 driver.implicitly_wait(5)
-                                sch_boxes = driver.find_elements_by_css_selector("div[ class *= 'scheduleButtonBox']")
+                                sch_boxes = driver.find_elements(By.CSS_SELECTOR, "div[ class *= 'scheduleButtonBox']")
                                 for s in range(len(sch_boxes)):
-                                        sch_box = driver.find_elements_by_css_selector("div[ class *= 'scheduleButtonBox']")[s]
-                                        sch_name = sch_box.find_element_by_xpath('..').find_element_by_tag_name('p').get_attribute('innerHTML')
-                                        sch_button = sch_box.find_element_by_tag_name('button')
-                                        sch_block = sch_box.find_element_by_xpath('..').find_element_by_xpath('..')
-                                        sch_forms = sch_block.find_elements_by_tag_name('input')
+                                        sch_box = driver.find_elements(By.CSS_SELECTOR, "div[ class *= 'scheduleButtonBox']")[s]
+                                        sch_name = sch_box.find_element(By.XPATH, '..').find_element(By.TAG_NAME, 'p').get_attribute('innerHTML')
+                                        sch_button = sch_box.find_element(By.TAG_NAME, 'button')
+                                        sch_block = sch_box.find_element(By.XPATH, '..').find_element(By.XPATH, '..')
+                                        sch_forms = sch_block.find_elements(By.TAG_NAME, 'input')
                                         if sch_name == trt:
                                                 if len(sch_forms) == 0:
                                                         sch_button.click()
                                                 time.sleep(1)
-                                                sch_forms = sch_block.find_elements_by_tag_name('input')
+                                                sch_forms = sch_block.find_elements(By.TAG_NAME, 'input')
                                                 start_btn = sch_forms[0]
                                                 driver.execute_script("arguments[0].scrollIntoView();", start_btn)  # scroll to for the schedule start field to be visible
                                                 start_c_val = start_btn.get_attribute('value')
@@ -81,9 +82,9 @@ for i in range(len(df)):
                 elif mode == 'disable':
                         button.click()  # click button
                         driver.implicitly_wait(10)
-                        lst = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')
+                        lst = driver.find_element(By.ID, 'menu-traitSelector').find_elements(By.TAG_NAME, 'li')
                         for t in range(len(lst)):
-                                item = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')[t]
+                                item = driver.find_element(By.ID, 'menu-traitSelector').find_elements(By.TAG_NAME, 'li')[t]
                                 driver.execute_script("arguments[0].scrollIntoView();", item)
                                 itemt = item.get_attribute('innerHTML').replace('&amp;', '&')
                                 itemt = re.sub('<span.+', "", itemt)
@@ -99,9 +100,9 @@ for i in range(len(df)):
                 if mode == 'enable':
                         button.click()  # click button
                         driver.implicitly_wait(10)
-                        lst = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')
+                        lst = driver.find_element(By.ID, 'menu-traitSelector').find_elements(By.TAG_NAME, 'li')
                         for t in range(len(lst)):
-                                item = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')[t]
+                                item = driver.find_element(By.ID, 'menu-traitSelector').find_elements(By.TAG_NAME, 'li')[t]
                                 driver.execute_script("arguments[0].scrollIntoView();", item)
                                 itemt = item.get_attribute('innerHTML').replace('&amp;', '&')
                                 itemt = re.sub('<span.+', "", itemt)
@@ -115,20 +116,20 @@ for i in range(len(df)):
                         #Scheduling config
                         if (t_start != '' and t_stop != ''):
                                 driver.implicitly_wait(5)
-                                sch_boxes = driver.find_elements_by_css_selector("div[ class *= 'scheduleButtonBox']")
+                                sch_boxes = driver.find_elements(By.CSS_SELECTOR, "div[ class *= 'scheduleButtonBox']")
                                 for s in range(len(sch_boxes)):
-                                        sch_box =  driver.find_elements_by_css_selector("div[ class *= 'scheduleButtonBox']")[s]
-                                        sch_name = sch_box.find_element_by_xpath('..').find_element_by_tag_name('p').get_attribute('innerHTML')
-                                        sch_button = sch_box.find_element_by_tag_name('button')
+                                        sch_box =  driver.find_elements(By.CSS_SELECTOR, "div[ class *= 'scheduleButtonBox']")[s]
+                                        sch_name = sch_box.find_element(By.XPATH, '..').find_element(By.TAG_NAME, 'p').get_attribute('innerHTML')
+                                        sch_button = sch_box.find_element(By.TAG_NAME, 'button')
                                         if sch_name == trt:
                                                 sch_button.click()
                                                 time.sleep(1)
-                                                per_fields = driver.find_elements_by_css_selector("div[class = 'react-datepicker-wrapper'")
+                                                per_fields = driver.find_elements(By.CSS_SELECTOR, "div[class = 'react-datepicker-wrapper'")
                                                 fld_counter = len(per_fields) #counts how many fields for start / stop periods we have
-                                                start_btn =  per_fields[fld_counter - 2].find_element_by_tag_name('input')
+                                                start_btn =  per_fields[fld_counter - 2].find_element(By.TAG_NAME, 'input')
                                                 driver.execute_script("arguments[0].scrollIntoView();", start_btn)  # scroll to for the schedule start field to be visible
                                                 start_btn.send_keys(t_start)
-                                                stop_btn = per_fields[fld_counter - 1].find_element_by_tag_name('input')
+                                                stop_btn = per_fields[fld_counter - 1].find_element(By.TAG_NAME, 'input')
                                                 stop_btn.send_keys(t_stop)
                                                 break
                         print(i, x + '\t' + c_trt + '\t' + 'done - enabled' + '\t' + str(datetime.datetime.now()))

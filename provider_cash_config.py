@@ -12,6 +12,7 @@ from settings.config import username, password, database, chromedriver, base_adm
 from settings.config import scope, doc_url, js_dump
 import json
 import os
+from selenium.webdriver.common.by import By
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
 sheetname = os.path.basename(__file__) #get name of the current script and use it to find a list with same name in Gsheet file
@@ -30,15 +31,15 @@ for i in range(len(df)):
         driver.get(x)
         driver.implicitly_wait(100)
         #cash parameter config
-        cash_button = driver.find_element_by_id('mui-component-select-cash_payments_accepted') #find traits button
+        cash_button = driver.find_element(By.ID, 'mui-component-select-cash_payments_accepted') #find traits button
         time.sleep(2)
         driver.execute_script("arguments[0].scrollIntoView();", cash_button)  # scroll down to the button
         param = str(df.iloc[i, 1])  # assign tag variable
         param_re = param.replace("(", "\(").replace(")", "\)")
         cash_button.click()
-        lst = driver.find_element_by_id("menu-cash_payments_accepted").find_elements_by_tag_name('li')
+        lst = driver.find_element(By.ID, "menu-cash_payments_accepted").find_elements(By.TAG_NAME, 'li')
         for t in range(len(lst)):
-                item = driver.find_element_by_id("menu-cash_payments_accepted").find_elements_by_tag_name('li')[t]
+                item = driver.find_element(By.ID, "menu-cash_payments_accepted").find_elements(By.TAG_NAME, 'li')[t]
                 item_c = item.get_attribute('innerHTML').replace('&amp;', '&')
                 item_c = re.sub('<span.+', "", item_c)
                 if re.search(param, item_c):

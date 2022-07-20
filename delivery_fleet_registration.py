@@ -6,6 +6,7 @@ from utils.admin_panel import AdminPanel
 from utils.get_cell_value import get_cell_value
 from settings.config import username, password, database, chromedriver, base_admin_panel_url
 import re
+from selenium.webdriver.common.by import By
 
 df = pd.read_csv(database)
 
@@ -24,7 +25,7 @@ for index, row in df.iterrows():
             #input(str(column) + ":" + str(get_cell_value(row, column)))
             field_name = column.replace("fleet_", "") #used only for name, since there is a bug using the variable name alone
             admin_panel.set_form_value(field_name, get_cell_value(row, column))
-        driver.find_element_by_xpath("//span[contains(text(),'Save')]").click()
+        driver.find_element(By.XPATH, "//span[contains(text(),'Save')]").click()
         sleep(1)
         driver.implicitly_wait(10)
         driver.implicitly_wait(10)

@@ -13,6 +13,7 @@ from settings.config import username, password, database, chromedriver, base_adm
 from settings.config import scope, doc_url, js_dump
 import json
 import os
+from selenium.webdriver.common.by import By
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
 sheetname = os.path.basename(__file__) #get name of the current script and use it to find a list with same name in Gsheet file
@@ -32,7 +33,7 @@ for i in range(len(df)):
     driver.get(x) #open provider profile in admin
     time.sleep(2) #wait a bit for the values in all forms to load
     driver.implicitly_wait(10) #timeout waiting step
-    c_email_box = driver.find_element_by_name('communication_email')  # locate element where the comm email is stored
+    c_email_box = driver.find_element(By.NAME, 'communication_email')  # locate element where the comm email is stored
     driver.execute_script("arguments[0].scrollIntoView();", c_email_box) #scroll page to the element to interact with it
     c_email_val = c_email_box.get_attribute('value') #get current value of comm email
     [c_email_box.send_keys(Keys.BACKSPACE) for c in range(len(c_email_val))] #remove old comm email

@@ -13,6 +13,7 @@ from settings.config import username, password, database, chromedriver, base_adm
 from settings.config import scope, doc_url, js_dump
 import json
 import os
+from selenium.webdriver.common.by import By
 
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
@@ -33,8 +34,8 @@ for i in range(len(df)):
         driver.get(x)
         time.sleep(2)
         driver.implicitly_wait(100)
-        pickup_box = driver.find_element_by_name("is_accepting_takeaway_orders") #locate pickup box
-        pickup_param = pickup_box.find_element_by_xpath('..').find_element_by_xpath('..').get_attribute('class') # Pickup - check if enabled
+        pickup_box = driver.find_element(By.NAME, "is_accepting_takeaway_orders") #locate pickup box
+        pickup_param = pickup_box.find_element(By.XPATH, '..').find_element(By.XPATH, '..').get_attribute('class') # Pickup - check if enabled
         if mode == 'enable':
                 if re.search('checked', pickup_param): pass
                 else: pickup_box.click() #enable pickup if it is not enabled
@@ -42,11 +43,11 @@ for i in range(len(df)):
                 if re.search('checked', pickup_param): pickup_box.click()
                 else: pass #disable enable pickup if it is not disabled enabled
         driver.implicitly_wait(100)
-        pf_box = driver.find_element_by_name("takeaway_amount") #find pickup fee element
+        pf_box = driver.find_element(By.NAME, "takeaway_amount") #find pickup fee element
         pickup_fee = pf_box.get_attribute('value') #get current pickup fee value
         [pf_box.send_keys(Keys.BACKSPACE) for n in range(len(pickup_fee))] #remove old fee
         time.sleep(1)
-        driver.find_element_by_name("takeaway_amount").send_keys(str(df.iloc[i, 1]))# Insert new pickup fee
+        driver.find_element(By.NAME, "takeaway_amount").send_keys(str(df.iloc[i, 1]))# Insert new pickup fee
         # Save changes
         admin_panel.save_provider()
         print(x, round((i + 1) / len(df), 2), 'completed from total', datetime.datetime.now())

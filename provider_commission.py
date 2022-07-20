@@ -13,6 +13,7 @@ from settings.config import username, password, database, chromedriver, base_adm
 from settings.config import scope, doc_url, js_dump
 import json
 import os
+from selenium.webdriver.common.by import By
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
 sheetname = os.path.basename(__file__) #get name of the current script and use it to find a list with same name in Gsheet file
@@ -33,8 +34,8 @@ for i in range(len(df)):
         driver.get(x)
         time.sleep(2)
         driver.implicitly_wait(100)
-        fee_box = driver.find_element_by_name("amount")
-        if param == 'takeaway': fee_box = driver.find_element_by_name('takeaway_amount')
+        fee_box = driver.find_element(By.NAME, "amount")
+        if param == 'takeaway': fee_box = driver.find_element(By.NAME, 'takeaway_amount')
         c_fee = fee_box.get_attribute('value')
         # remove old fee
         [fee_box.send_keys(Keys.BACKSPACE) for n in range(10)]  # delete old

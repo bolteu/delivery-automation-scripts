@@ -12,6 +12,7 @@ from utils.admin_panel import AdminPanel
 from settings.config import username, password, database, chromedriver, base_admin_panel_url, old_base_admin_panel_url
 from settings.config import scope, doc_url, js_dump
 import os
+from selenium.webdriver.common.by import By
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
 sheetname = os.path.basename(__file__) #get name of the current script and use it to find a list with same name in Gsheet file
@@ -31,7 +32,7 @@ for i in range(len(df)):
         time.sleep(2)
         driver.implicitly_wait(100)
         # Cooking time
-        ct_box = driver.find_element_by_name("average_cooking_time")
+        ct_box = driver.find_element(By.NAME, "average_cooking_time")
         # delete old
         [ct_box.send_keys(Keys.BACKSPACE) for n in range(0,8)]
         time.sleep(1)

@@ -12,6 +12,7 @@ from settings.config import username, password, database, chromedriver, base_adm
 from settings.config import scope, doc_url, js_dump
 import json
 import os
+from selenium.webdriver.common.by import By
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
 sheetname = os.path.basename(__file__) #get name of the current script and use it to find a list with same name in Gsheet file
@@ -31,9 +32,9 @@ for i in range(len(df)):
         driver.get(x)
         time.sleep(1)
         driver.implicitly_wait(100)
-        promo_box = driver.find_element_by_xpath("//*[text()='Enable Promotions']")
+        promo_box = driver.find_element(By.XPATH, "//*[text()='Enable Promotions']")
 
-        promo_param = promo_box.find_element_by_xpath('..').find_elements_by_tag_name('span')[0].get_attribute('class')
+        promo_param = promo_box.find_element(By.XPATH, '..').find_elements(By.TAG_NAME, 'span')[0].get_attribute('class')
 
         if re.search('checked', promo_param):
                 if mode == 'check':

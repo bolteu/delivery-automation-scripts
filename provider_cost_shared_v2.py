@@ -11,6 +11,8 @@ from utils.admin_panel import AdminPanel
 from settings.config import username, password, chromedriver, base_admin_panel_url, old_base_admin_panel_url
 from settings.config import js_dump, scope, doc_url
 import os
+from selenium.webdriver.common.by import By
+
 #initialize model
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
 sheetname = os.path.basename(__file__) #get name of the current script and use it to find a list with same name in Gsheet file
@@ -31,7 +33,7 @@ for i in range(len(df)):
     driver.get(x)
     driver.implicitly_wait(100)
     #version config
-    button = driver.find_element_by_id('mui-component-select-version') #find version button
+    button = driver.find_element(By.ID, 'mui-component-select-version') #find version button
     time.sleep(2)
     driver.execute_script("arguments[0].scrollIntoView();", button)  # scroll down to the button
     curr_v = button.get_attribute('innerHTML') #get current version
@@ -40,7 +42,7 @@ for i in range(len(df)):
     else:
         button.click()  # click button
         driver.implicitly_wait(10)
-        lst = driver.find_element_by_id('menu-version').find_elements_by_tag_name('li')
+        lst = driver.find_element(By.ID, 'menu-version').find_elements(By.TAG_NAME, 'li')
         for t in range(len(lst)):
             item = lst[t]
             driver.execute_script("arguments[0].scrollIntoView();", item)
