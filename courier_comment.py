@@ -8,6 +8,7 @@ from utils.admin_panel import AdminPanel, get_element_type, get_unique
 from utils.get_cell_value import get_cell_value
 from settings.config import username, password, database, chromedriver, base_admin_panel_url
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 import re
 
 df = pd.read_csv(database)

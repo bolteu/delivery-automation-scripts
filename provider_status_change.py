@@ -12,6 +12,7 @@ from utils.admin_panel import AdminPanel
 from settings.config import username, password, database, chromedriver, base_admin_panel_url, old_base_admin_panel_url
 from settings.config import scope, doc_url, js_dump
 import os
+from selenium.webdriver.common.by import By
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope)  # initialise credentials for GSheet API
 sheetname = os.path.basename(__file__)  # get name of the current script and use it to find a list with same name in Gsheet file
@@ -30,7 +31,7 @@ for i in range(len(df)):
     driver.get(x)
     driver.implicitly_wait(10)
     # status config
-    status_button = driver.find_element_by_id('mui-component-select-status')  # find status button
+    status_button = driver.find_element(By.ID, 'mui-component-select-status')  # find status button
     time.sleep(2)
     driver.execute_script("arguments[0].scrollIntoView();", status_button)  # scroll down to the button
     time.sleep(1)
@@ -46,9 +47,9 @@ for i in range(len(df)):
     else:
         status_button.click()  # click button
         driver.implicitly_wait(10)
-        lst = driver.find_element_by_id('menu-status').find_elements_by_tag_name('li')
+        lst = driver.find_element(By.ID, 'menu-status').find_elements(By.TAG_NAME, 'li')
         for t in range(len(lst)):
-            item = driver.find_element_by_id('menu-status').find_elements_by_tag_name('li')[t]
+            item = driver.find_element(By.ID, 'menu-status').find_elements(By.TAG_NAME, 'li')[t]
             driver.execute_script("arguments[0].scrollIntoView();", item)
             itemt = item.get_attribute('innerHTML').replace('&amp;', '&')
             itemt = re.sub('<span.+', "", itemt)
@@ -65,13 +66,13 @@ for i in range(len(df)):
         print(i, x + '\t' + status + '\t' + 'status done - put in place' + '\t' + str(datetime.datetime.now()))
 
         if status in ['Hidden','Archived'] and main_reason != '':  # check if main reason must be given (hidden or archive status and main reason is given)
-            main_reason_button = driver.find_element_by_id('mui-component-select-ops_main_reason')
+            main_reason_button = driver.find_element(By.ID, 'mui-component-select-ops_main_reason')
             driver.execute_script("arguments[0].scrollIntoView();", status_button)
             time.sleep(1)
             main_reason_button.click()
-            lst = driver.find_element_by_id('menu-ops_main_reason').find_elements_by_tag_name('li')
+            lst = driver.find_element(By.ID, 'menu-ops_main_reason').find_elements(By.TAG_NAME, 'li')
             for t in range(len(lst)):
-                item = driver.find_element_by_id('menu-ops_main_reason').find_elements_by_tag_name('li')[t]
+                item = driver.find_element(By.ID, 'menu-ops_main_reason').find_elements(By.TAG_NAME, 'li')[t]
                 driver.execute_script("arguments[0].scrollIntoView();", item)
                 itemt = item.get_attribute('innerHTML').replace('&amp;', '&')
                 itemt = re.sub('<span.+', "", itemt)
@@ -88,13 +89,13 @@ for i in range(len(df)):
             print(i, x + '\t' + main_reason + '\t' + 'main reason done - put in place' + '\t' + str(datetime.datetime.now()))
 
         if status in ['Hidden','Archived'] and sub_reason != '':  # check if sub reason must be given (hidden or archive status and sub reason is given)
-            sub_reason_button = driver.find_element_by_id('mui-component-select-ops_sub_reason')
+            sub_reason_button = driver.find_element(By.ID, 'mui-component-select-ops_sub_reason')
             driver.execute_script("arguments[0].scrollIntoView();", status_button)
             time.sleep(1)
             sub_reason_button.click()
-            lst = driver.find_element_by_id('menu-ops_sub_reason').find_elements_by_tag_name('li')
+            lst = driver.find_element(By.ID, 'menu-ops_sub_reason').find_elements(By.TAG_NAME, 'li')
             for t in range(len(lst)):
-                item = driver.find_element_by_id('menu-ops_sub_reason').find_elements_by_tag_name('li')[t]
+                item = driver.find_element(By.ID, 'menu-ops_sub_reason').find_elements(By.TAG_NAME, 'li')[t]
                 driver.execute_script("arguments[0].scrollIntoView();", item)
                 itemt = item.get_attribute('innerHTML').replace('&amp;', '&')
                 itemt = re.sub('<span.+', "", itemt)
@@ -111,7 +112,7 @@ for i in range(len(df)):
             print(i, x + '\t' + sub_reason + '\t' + 'sub reason done - put in place' + '\t' + str(datetime.datetime.now()))
 
         if comment !='':
-            comm_box = driver.find_element_by_name('ops_comment') #to fetch the comments box
+            comm_box = driver.find_element(By.NAME, 'ops_comment') #to fetch the comments box
             comm_box.send_keys(comment)
 
             try:

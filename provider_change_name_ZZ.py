@@ -12,6 +12,7 @@ from settings.config import username, password, database, chromedriver, base_adm
 from settings.config import scope, doc_url, js_dump
 import json
 import os
+from selenium.webdriver.common.by import By
 
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
@@ -32,7 +33,7 @@ for i in range(len(df)):
         driver.get(x)
         driver.implicitly_wait(10)
         try:
-                name_zz_box = driver.find_element_by_xpath("//input[contains(@name, '-ZZ')]") #find zz box
+                name_zz_box = driver.find_element(By.XPATH, "//input[contains(@name, '-ZZ')]") #find zz box
                 time.sleep(2)
                 current_desc = name_zz_box.get_attribute('value') #get current description
                 [name_zz_box.send_keys(Keys.BACKSPACE) for l in range(len(current_desc))] #to delete previous value

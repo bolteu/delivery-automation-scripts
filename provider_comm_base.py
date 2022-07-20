@@ -12,6 +12,8 @@ from settings.config import username, password, database, chromedriver, base_adm
 from settings.config import scope, doc_url, js_dump
 import json
 import os
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.by import By
 
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
@@ -31,7 +33,7 @@ for i in range(len(df)):
         driver.get(x)
         driver.implicitly_wait(100)
         #tags config
-        comm_button = driver.find_element_by_id('mui-component-select-base') #find commission base button
+        comm_button = driver.find_element(By.ID, 'mui-component-select-base') #find commission base button
         time.sleep(2)
         driver.execute_script("arguments[0].scrollIntoView();", comm_button)  # scroll down to the button
         time.sleep(1)
@@ -43,9 +45,9 @@ for i in range(len(df)):
         else:
                 comm_button.click()  # click button
                 driver.implicitly_wait(10)
-                lst = driver.find_element_by_id('menu-base').find_elements_by_tag_name('li')
+                lst = driver.find_element(By.ID, 'menu-base').find_elements(By.TAG_NAME, 'li')
                 for t in range(len(lst)):
-                        item = driver.find_element_by_id('menu-base').find_elements_by_tag_name('li')[t]
+                        item = driver.find_element(By.ID, 'menu-base').find_elements(By.TAG_NAME, 'li')[t]
                         driver.execute_script("arguments[0].scrollIntoView();", item)
                         itemt = item.get_attribute('innerHTML').replace('&amp;', '&')
                         itemt = re.sub('<span.+', "", itemt)

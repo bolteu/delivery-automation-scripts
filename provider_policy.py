@@ -13,6 +13,7 @@ from settings.config import username, password, database, chromedriver, base_adm
 from settings.config import scope, doc_url, js_dump
 import json
 import os
+from selenium.webdriver.common.by import By
 
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
@@ -32,7 +33,7 @@ for i in range(len(df)):
         driver.get(x)
         driver.implicitly_wait(100)
         #policies config
-        pol_button = driver.find_element_by_id('mui-component-select-provider_match_by_policy_ids') #find policies button
+        pol_button = driver.find_element(By.ID, 'mui-component-select-provider_match_by_policy_ids') #find policies button
         time.sleep(2)
         driver.execute_script("arguments[0].scrollIntoView();", pol_button)  # scroll down to the button
         time.sleep(1)
@@ -46,9 +47,9 @@ for i in range(len(df)):
                 elif mode == 'disable':
                         pol_button.click()  # click button
                         driver.implicitly_wait(10)
-                        lst = driver.find_element_by_id('menu-provider_match_by_policy_ids').find_elements_by_tag_name('li')
+                        lst = driver.find_element(By.ID, 'menu-provider_match_by_policy_ids').find_elements(By.TAG_NAME, 'li')
                         for t in range(len(lst)):
-                                item = driver.find_element_by_id('menu-provider_match_by_policy_ids').find_elements_by_tag_name('li')[t]
+                                item = driver.find_element(By.ID, 'menu-provider_match_by_policy_ids').find_elements(By.TAG_NAME, 'li')[t]
                                 driver.execute_script("arguments[0].scrollIntoView();", item)
                                 itemt = item.get_attribute('innerHTML').replace('&amp;', '&')
                                 itemt = re.sub('<span.+', "", itemt)
@@ -65,9 +66,9 @@ for i in range(len(df)):
                 if mode == 'enable':
                         pol_button.click()  # click button
                         driver.implicitly_wait(10)
-                        lst = driver.find_element_by_id('menu-provider_match_by_policy_ids').find_elements_by_tag_name('li')
+                        lst = driver.find_element(By.ID, 'menu-provider_match_by_policy_ids').find_elements(By.TAG_NAME, 'li')
                         for t in range(len(lst)):
-                                item = driver.find_element_by_id('menu-provider_match_by_policy_ids').find_elements_by_tag_name('li')[t]
+                                item = driver.find_element(By.ID, 'menu-provider_match_by_policy_ids').find_elements(By.TAG_NAME, 'li')[t]
                                 driver.execute_script("arguments[0].scrollIntoView();", item)
                                 itemt = item.get_attribute('innerHTML').replace('&amp;', '&')
                                 itemt = re.sub('<span.+', "", itemt)

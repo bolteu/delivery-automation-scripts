@@ -61,18 +61,18 @@ class AdminPanel:
     def login(self, username, password):
         self.driver.get(base_admin_panel_url + "/login?stage=credentials")
         self.driver.implicitly_wait(10)
-        self.driver.find_element_by_name("username").send_keys(username)
-        self.driver.find_element_by_name("password").send_keys(password)
-        self.driver.find_element_by_xpath("//span[contains(text(),'Login')]").click()
+        self.driver.find_element(By.NAME, "username").send_keys(username)
+        self.driver.find_element(By.NAME, "password").send_keys(password)
+        self.driver.find_element(By.XPATH, "//span[contains(text(),'Login')]").click()
         wait = WebDriverWait(self.driver, 5)
         wait.until(EC.url_to_be(f'{base_admin_panel_url}/'))
 
     def old_login(self, username, password):
         self.driver.get(old_base_admin_panel_url + "/delivery/Courier/courier/?root_id=1474185")
         self.driver.implicitly_wait(10)
-        self.driver.find_element_by_name("username").send_keys(username)
-        self.driver.find_element_by_name("password").send_keys(password)
-        self.driver.find_element_by_xpath("//div[contains(text(),'Login')]").click()
+        self.driver.find_element(By.NAME, "username").send_keys(username)
+        self.driver.find_element(By.NAME, "password").send_keys(password)
+        self.driver.find_element(By.XPATH, "//div[contains(text(),'Login')]").click()
 
     def get_form_value(self, field_name):
         log('get form value (' + field_name + ')')
@@ -97,15 +97,15 @@ class AdminPanel:
         if isinstance(field_value, float) and math.isnan(field_value):
             return
         try:
-            el = self.driver.find_element_by_name(field_name)
+            el = self.driver.find_element(By.NAME, field_name)
             el_type = get_element_type(el)
             log('set form value with type (' + field_name + ', ' + str(field_value) + ',' + el_type + ')')
 
             if el_type == 'multiselect':
-                el.find_element_by_xpath("..").click()
+                el.find_element(By.XPATH, "..").click()
                 sleep(1)
                 select_values = str(field_value).split(',')
-                for option in self.driver.find_elements_by_css_selector('.MuiListItem-root'):
+                for option in self.driver.find_elements(By.CSS_SELECTOR, '.MuiListItem-root'):
                     if option.text.strip() in select_values:
                         option.click()
                         sleep(2)
@@ -120,7 +120,7 @@ class AdminPanel:
 
                 el.send_keys(str(field_value))
 
-                for option in self.driver.find_elements_by_css_selector('.MuiAutocomplete-option'):
+                for option in self.driver.find_elements(By.CSS_SELECTOR, '.MuiAutocomplete-option'):
                     if option.text == str(field_value):
                         option.click()
                         break
@@ -137,7 +137,7 @@ class AdminPanel:
                     el.click()
 
             elif el_type == 'select':
-                for option in el.find_elements_by_tag_name('option'):
+                for option in el.find_elements(By.TAG_NAME, 'option'):
                     if option.text == str(field_value):
                         option.click()
                         break
@@ -148,7 +148,7 @@ class AdminPanel:
 
     def save_provider(self):
         self.driver.implicitly_wait(5)
-        save_el = self.driver.find_element_by_xpath("// span[contains(text(), 'Save')]")
+        save_el = self.driver.find_element(By.XPATH, "// span[contains(text(), 'Save')]")
         self.driver.execute_script("arguments[0].scrollIntoView();", save_el)
         sleep(0.5)
         self.driver.execute_script("arguments[0].click();", save_el)

@@ -13,6 +13,7 @@ from settings.config import username, password, database, chromedriver, base_adm
 from settings.config import scope, doc_url, js_dump
 import json
 import os
+from selenium.webdriver.common.by import By
 
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(js_dump, scope) #initialise credentials for GSheet API
@@ -39,7 +40,7 @@ for i in range(len(df)):
         trt_re = trt.replace("(", "\(").replace(")", "\)")
         # Delivery fee
         time.sleep(1)
-        del_box = driver.find_element_by_name('client_delivery_min_price')
+        del_box = driver.find_element(By.NAME, 'client_delivery_min_price')
         driver.execute_script("arguments[0].scrollIntoView();", del_box)
         del_val = del_box.get_attribute('value')
         [del_box.send_keys(Keys.BACKSPACE) for n in range(len(del_val))] # delete old
@@ -47,7 +48,7 @@ for i in range(len(df)):
         del_box.send_keys(bd_fee) # add new
         # Del. distance
         time.sleep(1)
-        dd = driver.find_element_by_name('client_delivery_min_price_distance_in_km')
+        dd = driver.find_element(By.NAME, 'client_delivery_min_price_distance_in_km')
         driver.execute_script("arguments[0].scrollIntoView();", dd)
         dd_val = dd.get_attribute('value')
         [dd.send_keys(Keys.BACKSPACE) for n in range(len(dd_val))] # delete old
@@ -55,7 +56,7 @@ for i in range(len(df)):
         dd.send_keys(b_dist) # add new
         #Commission
         time.sleep(1)
-        fee_b = driver.find_element_by_name('amount')
+        fee_b = driver.find_element(By.NAME, 'amount')
         driver.execute_script("arguments[0].scrollIntoView();", fee_b)
         fee_val = fee_b.get_attribute('value')
         [fee_b.send_keys(Keys.BACKSPACE) for n in range(len(fee_val))] # delete old
@@ -63,7 +64,7 @@ for i in range(len(df)):
         if mode == 'enable': fee_b.send_keys(camp_fee) # add new fee when enabling free delivery
         elif mode == 'disable': fee_b.send_keys(reg_fee)  # add new fee when disabling free delivery
         # traits config
-        button = driver.find_element_by_id('mui-component-select-traitSelector')  # find traits button
+        button = driver.find_element(By.ID, 'mui-component-select-traitSelector')  # find traits button
         time.sleep(2)
         driver.execute_script("arguments[0].scrollIntoView();", button)  # scroll down to the button
         time.sleep(1)
@@ -76,9 +77,9 @@ for i in range(len(df)):
                 elif mode == 'disable':
                         button.click()  # click button
                         driver.implicitly_wait(10)
-                        lst = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')
+                        lst = driver.find_element(By.ID, 'menu-traitSelector').find_elements(By.TAG_NAME, 'li')
                         for t in range(len(lst)):
-                                item = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')[t]
+                                item = driver.find_element(By.ID, 'menu-traitSelector').find_elements(By.TAG_NAME, 'li')[t]
                                 driver.execute_script("arguments[0].scrollIntoView();", item)
                                 itemt = item.get_attribute('innerHTML').replace('&amp;', '&')
                                 itemt = re.sub('<span.+', "", itemt)
@@ -93,9 +94,9 @@ for i in range(len(df)):
                 if mode == 'enable':
                         button.click()  # click button
                         driver.implicitly_wait(10)
-                        lst = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')
+                        lst = driver.find_element(By.ID, 'menu-traitSelector').find_elements(By.TAG_NAME, 'li')
                         for t in range(len(lst)):
-                                item = driver.find_element_by_id('menu-traitSelector').find_elements_by_tag_name('li')[t]
+                                item = driver.find_element(By.ID, 'menu-traitSelector').find_elements(By.TAG_NAME, 'li')[t]
                                 driver.execute_script("arguments[0].scrollIntoView();", item)
                                 itemt = item.get_attribute('innerHTML').replace('&amp;', '&')
                                 itemt = re.sub('<span.+', "", itemt)
