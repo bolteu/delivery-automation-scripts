@@ -66,6 +66,27 @@ for index, row in df.iterrows():
         driver.find_element(By.XPATH, "//span[contains(text(),'Save')]").click()
 
         admin_panel.wait_for_url_change('couriers/\d+\?tab=COURIER')
+
+        script_step = 'Add bag info'
+        courier_id = re.search("([0-9]+)", driver.current_url)[0]
+        extra_step_info.append('Courier profile id: ' + courier_id)
+        driver.get(f'{admin_panel.courier_url(courier_id)}?tab=BAGS')
+        sleep(1)
+
+        for column in columns:
+            if 'bag_' in column:
+                if column == 'bag_serial':
+                    field_name = 'bagSerial'
+                else:
+                    field_name = column.replace('bag_', '')
+                admin_panel.set_form_value(field_name, get_cell_value(row, column))
+        bag_assign_el = driver.find_element(By.XPATH, "//span[contains(text(),'Assign Bag')]")
+        bag_assign_el = bag_assign_el.find_element(By.XPATH, "..").click()
+        if 'force_confirmation_bag' in columns:
+            if get_cell_value(row, 'force_confirmation_bag') == 1:
+                bag_assign_confirmation = driver.find_element(By.XPATH, "//span[contains(text(),'Ok')]")
+                bag_assign_confirmation.find_element(By.XPATH, "..").click()
+        sleep(1)
         print(" [OK]")
     except:
         print(" [FAILED]")
