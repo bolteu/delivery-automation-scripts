@@ -155,3 +155,5 @@ class AdminPanel:
         sleep(3)
     def provider_url(self, id):
         return base_admin_panel_url + provider_scope + "providers/" + str(id)
+    def courier_url(self, id):
+        return base_admin_panel_url + "/delivery-courier/couriers/" + str(id)
